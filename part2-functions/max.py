@@ -25,7 +25,7 @@ def max_heap(min_heap):
     return - heapq.heappop(min_heap)
 
 
-def load_heap(vector):
+def populate_heap(vector):
     vector = [-x for x in vector]
     heapq.heapify(vector)
     return vector
