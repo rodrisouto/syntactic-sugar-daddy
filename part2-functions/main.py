@@ -1,6 +1,7 @@
 
 import sys
 
+from median import median_vector
 from utils.LinkedList import LinkedList
 from mean import *
 from max import *
