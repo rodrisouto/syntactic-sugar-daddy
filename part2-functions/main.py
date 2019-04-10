@@ -1,6 +1,7 @@
 
 import sys
 
+from median import median_vector
 from utils.LinkedList import LinkedList
 from mean import *
 from max import *
@@ -34,6 +35,8 @@ if __name__ == "__main__":
         results = run_all(numbers, max_vector, max_list, max_ordered_vector, max_heap, populate_heap)
     elif func_name == "media":
         results = run_all(numbers, mean_vector, mean_list, mean_ordered_vector, mean_calculator, populate_mean_calculator)
+    elif func_name == "mediana":
+        results = run_all(numbers, median_vector, mean_list, mean_ordered_vector, mean_calculator, populate_mean_calculator)
     else:
         print("Function unknown: " + func_name, file=sys.stderr)
         exit(1)
