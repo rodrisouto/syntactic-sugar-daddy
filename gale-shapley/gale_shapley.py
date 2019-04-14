@@ -1,7 +1,7 @@
 def gale_shapley(men):
     pairs = set()
     while len(men):
-        man = men.pop()
+        man = men.pop(0)
         woman = man.pop_preferred()
         if woman.is_free():
             woman.engage(man)
@@ -9,11 +9,14 @@ def gale_shapley(men):
             pairs.add((man, woman))
         else:
             if woman.prefers(man):
-                pairs.remove((woman.get_partner(), man))
                 ex = woman.release()
-                ex.free()
+                pairs.remove((ex, woman))
+                ex.release()
                 men.append(ex)
                 woman.engage(man)
                 man.engage(woman)
                 pairs.add((man, woman))
+
+        if man.can_propose():
+            men.append(man)
     return pairs

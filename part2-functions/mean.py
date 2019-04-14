@@ -1,5 +1,3 @@
-from MeanCalculator import MeanCalculator
-
 
 def mean_vector(vector):
     sum = 0
@@ -25,9 +23,3 @@ def mean_ordered_vector(ordered_vector):
 def mean_calculator(mean_calculator):
     return mean_calculator.get_mean()
 
-
-def populate_mean_calculator(vector):
-    calculator = MeanCalculator()
-    for element in vector:
-        calculator.add_value(element)
-    return calculator
