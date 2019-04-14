@@ -7,7 +7,7 @@ class Person:
         self.positions = {}
 
     def __repr__(self):
-        return self.name
+        return '( Person: ' + self.name + ' | ' + str(len(self.preferences)) + ' )'
 
     def set_preferences(self, people):
         self.preferences = people
@@ -19,6 +19,10 @@ class Person:
         self.partners.append(person)
 
     def get_preferred(self):
+        if len(self.preferences):
+            return self.preferences[0]
+
+    def pop_preferred(self):
         if len(self.preferences):
             return self.preferences.pop(0)
 

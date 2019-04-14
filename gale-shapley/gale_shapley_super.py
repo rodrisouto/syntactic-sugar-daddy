@@ -1,10 +1,13 @@
+import sys
+sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/utils/')
 from people import Person
+
 
 def gale_shapley_super_stable(men, women):
     pairs = set()
     while len(men):
         man = men.pop()
-        preferred_women = man.get_preferred()
+        preferred_women = man.pop_preferred()
         for woman in preferred_women:
             woman.engage(man)
             man.engage(woman)
@@ -18,7 +21,8 @@ def gale_shapley_super_stable(men, women):
                 partners = woman.get_partners()
                 for i in partners:
                     pairs.remove((i, woman))
-    print(pairs)
+
+    return pairs
 
 
 def run():
@@ -30,11 +34,9 @@ def run():
     w2.set_preferences([[m2], [m1]])
     m1.set_preferences([[w1], [w2]])
     m2.set_preferences([[w1, w2]])
-    gale_shapley_super_stable([m1, m2], [w1, w2])
+    pairs = gale_shapley_super_stable([m1, m2], [w1, w2])
+
+    print(pairs)
+
 
 run()
-
-
-
-
-
