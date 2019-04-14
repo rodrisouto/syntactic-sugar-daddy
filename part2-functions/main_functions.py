@@ -31,7 +31,7 @@ def run_all(numbers, f_vector, f_list, f_ord_vector, f_other, populate_other):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage:\n\tpython3 main.py numbers.txt function", file=sys.stderr)
+        print("Usage:\n\tpython3 main_functions.py numbers.txt function", file=sys.stderr)
         exit(1)
 
     numbers = get_from_file(sys.argv[1])
