@@ -7,8 +7,6 @@ from typing import List, Any
 sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/utils/')
 sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/gale-shapley/')
 from people import Person
-from people_simple import Person as SimplePerson
-from gale_shapley_super import gale_shapley_super_stable
 from gale_shapley import gale_shapley
 
 
@@ -34,6 +32,7 @@ def solve_tie_randomly(list):
 
 
 def obtain_raw_players(players_path):
+
     raw_players = []
 
     with open(players_path, 'r') as players_file:
@@ -45,11 +44,12 @@ def obtain_raw_players(players_path):
 
 
 def obtain_players(players_names, preferences):
+
     players = []
     players_dict = {}
 
     for player_name in players_names:
-        new_player = SimplePerson(player_name)
+        new_player = Person(player_name)
 
         players_dict[player_name] = new_player
         players.append(new_player)
@@ -71,8 +71,8 @@ def set_preferences_for_player(player_name, preferences, players_dict):
     player.set_preferences(player_preferences_as_persons)
 
 
-
 def obtain_tied_preferences(raw_players):
+
     players_dict = {}
 
     for raw_player in raw_players:
@@ -117,12 +117,12 @@ def get_grouped_preferences_of_raw_player_by_score(raw_player):
     return groupby(sorted_preferences, lambda x: x[1])
 
 
-def solve_tied_preferences(tied_preferences, tie_solver_name):
+def solve_tied_preferences(tied_preferences, tie_solver_method):
 
     preferences = {}
 
     for player_name, player_tied_preferences in tied_preferences.items():
-        tie_solver = TIE_SOLVERS[tie_solver_name]
+        tie_solver = TIE_SOLVERS[tie_solver_method]
         player_preferences = flatten(list(map(lambda x: tie_solver(x), player_tied_preferences)))
 
         preferences[player_name] = player_preferences
@@ -132,10 +132,13 @@ def solve_tied_preferences(tied_preferences, tie_solver_name):
 
 if __name__ == '__main__':
 
-    assert len(sys.argv) == 3, 'Two parameters are required.'
+    assert len(sys.argv) == 4, 'Three parameters are required.'
 
     number_of_players = int(sys.argv[1])
     assert number_of_players % 2 == 0, 'There must be a pair amount of players.'
+
+    tie_solver_method = sys.argv[3]
+    assert TIE_SOLVERS[tie_solver_method] is not None, 'Valid tie solver methods are: alphabetic, random.'
 
     players_path = sys.argv[2]
 
@@ -147,7 +150,7 @@ if __name__ == '__main__':
     tied_preferences = obtain_tied_preferences(raw_players)
     print(tied_preferences)
 
-    preferences = solve_tied_preferences(tied_preferences, 'alphabetic')
+    preferences = solve_tied_preferences(tied_preferences, tie_solver_method)
     print(preferences)
     print()
 
