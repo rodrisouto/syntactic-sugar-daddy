@@ -17,9 +17,11 @@ def permutations(vector, partial, length, out):
             vector[partial], vector[i] = vector[i], vector[partial]
 
 
-def permutation_ordered_vector(ordered_vector):
+def permutations_list(linked_list):
+    # copy list to vector (O(n))
+    permutations_vector(linked_list)
+
+
+def permutations_ordered_vector(ordered_vector):
     #same
     return permutations_vector(ordered_vector)
-
-
-
