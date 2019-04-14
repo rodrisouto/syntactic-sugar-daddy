@@ -10,7 +10,7 @@ def max_vector(vector):
 
 
 def max_list(linked_list):
-    max_n = linked_list.head.number
+    max_n = linked_list[0]
     for n in linked_list:
         if n > max_n:
             max_n = n
@@ -29,4 +29,3 @@ def populate_heap(vector):
     vector = [-x for x in vector]
     heapq.heapify(vector)
     return vector
-
