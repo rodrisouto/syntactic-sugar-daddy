@@ -22,4 +22,6 @@ def standard_deviation_ordered_vector(ordered_vector):
     return standard_deviation_vector(ordered_vector)
 
 
+def standard_deviation_STD_calculator(std_calculator):
+    return std_calculator.getStdDeviation()
 
