@@ -1,4 +1,16 @@
 
+
+class SortedListIterator:
+    def __init__(self, sorted_list):
+        self.curr = sorted_list.head
+
+    def __next__(self):
+        n = self.curr
+        if n is None:
+            raise StopIteration
+        self.curr = self.curr.next
+        return n.number
+
 class Node:
     def __init__(self, n):
         self.number = n
@@ -41,9 +53,19 @@ class SortedList:
     def __str__(self):
         return self.__repr__()
 
+    def __iter__(self):
+        return SortedListIterator(self)
+
     def get(self, index):
         if index >= len(self): raise IndexError
         curr = self.head
         for i in range(index):
             curr = curr.next
         return curr.number
+
+
+def populate_sorted_list(list):
+    sorted_list = SortedList()
+    for number in list:
+        sorted_list.addOrdered(number)
+    return sorted_list

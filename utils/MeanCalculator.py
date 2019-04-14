@@ -10,3 +10,10 @@ class MeanCalculator:
 
     def get_mean(self):
         return self.sum / self.count
+
+
+def populate_mean_calculator(vector):
+    calculator = MeanCalculator()
+    for element in vector:
+        calculator.add_value(element)
+    return calculator
