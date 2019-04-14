@@ -1,48 +1,43 @@
 class Person:
 
     def __init__(self, name):
-        self.partners = []
+        self.partner = None
         self.preferences = None
         self.name = name
-        self.positions = {}
 
     def __repr__(self):
-        return '( Person: ' + self.name + ' | ' + str(len(self.preferences)) + ' )'
+        return '( Person2: ' + self.name + ' | ' + str(len(self.preferences)) + ' )'
 
     def set_preferences(self, people):
         self.preferences = people
-        for i in range(len(people)):
-            for j in range(len(people[i])):
-                self.positions[people[i][j]] = (i, j)
-
-    def engage(self, person):
-        self.partners.append(person)
 
     def get_preferred(self):
-        if len(self.preferences):
-            return self.preferences[0]
+        return self.preferences[0]
 
     def pop_preferred(self):
-        if len(self.preferences):
-            return self.preferences.pop(0)
+        return self.preferences.pop(0)
 
     def is_free(self):
-        return not len(self.partners)
+        return not self.partner
 
-    def get_rejected(self, person):
-        preference = self.positions[person][0]
-        rejected = []
-        for i in self.partners:
-            if self.positions[i][0] < preference:
-                rejected.append(i)
-                self.partners.remove(i)
-        return rejected
+    def engage(self, other_person):
+        self.partner = other_person
 
-    def is_multiply_engaged(self):
-        return len(self.partners) > 1
+    def prefers(self, other_person):
+        i1 = self.preferences.index(other_person)
+        i2 = self.preferences.index(self.partner)
+        value = True if (i1 < i2) else False
+        return value
 
-    def get_partners(self):
-        return self.partners
+    def can_propose(self):
+        return len(self.preferences) and not self.partner
 
-    def free(self, partner):
-        self.partners.remove(partner)
+    def get_partner(self):
+        return self.partner
+
+    def release(self):
+        aux = self.partner
+        self.partner = None
+        return aux
+
+
