@@ -27,4 +27,8 @@ def variations_list(linked_list, r):
 def variations_ordered_vector(ordered_vector, r):
     return variations_vector(ordered_vector, r)
 
-# TODO: our structure
+
+def variations_sorted_list(sorted_list, r):
+    return variations_vector(sorted_list, r)
+
+# TODO: our structure(done?)

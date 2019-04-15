@@ -3,7 +3,7 @@ def permutations_vector(vector):
     copy = vector.copy()
     out = []
     permutations(copy, 0, length, out)
-    return out
+    print(out)
 
 
 def permutations(vector, partial, length, out):
@@ -18,12 +18,14 @@ def permutations(vector, partial, length, out):
 
 
 def permutations_list(linked_list):
-    # copy list to vector (O(n))
-    permutations_vector(linked_list)
+    return permutations_vector(linked_list)
 
 
 def permutations_ordered_vector(ordered_vector):
-    #same
     return permutations_vector(ordered_vector)
 
-# TODO: our structure
+
+def permutations_sorted_list(sorted_list):
+    return permutations_vector(sorted_list)
+
+# TODO: our structure(done?)

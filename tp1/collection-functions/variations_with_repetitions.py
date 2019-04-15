@@ -27,4 +27,8 @@ def variations_with_repetitions_list(linked_list, r):
 def variations_with_repetitions_ordered_vector(ordered_vector, r):
     return variations_with_repetitions_vector(ordered_vector, r)
 
-# TODO: our structure
+
+def variations_with_repetitions_sorted_list(sorted_list, r):
+    return variations_with_repetitions_vector(sorted_list)
+
+# TODO: our structure (done?)
