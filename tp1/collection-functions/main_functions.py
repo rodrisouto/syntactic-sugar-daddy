@@ -12,7 +12,7 @@ from median import median_vector, median_list, median_ordered_vector, median_sor
 from mean import *
 from max import *
 from mode import mode_vector, mode_sorted_list, mode_ordered_vector, mode_list
-from permutations import permutations_vector, permutations_list, permutations_ordered_vector
+from permutations import permutations_vector, permutations_list, permutations_ordered_vector, permutations_sorted_list
 from standard_deviation import standard_deviation_STD_calculator, standard_deviation_ordered_vector, \
     standard_deviation_list, standard_deviation_vector
 from variations import variations_vector, variations_list, variations_ordered_vector
@@ -38,10 +38,10 @@ def __to_do(list):
 
 # populate_other recieves a list and returns the structure needed by f_other
 def run_all(numbers, f_vector, f_list, f_ord_vector, f_other, populate_other):
-    return [f_vector(numbers),
-            f_list(numbers),
+    return [f_vector(numbers[:]),
+            f_list(numbers[:]),
             f_ord_vector(sorted(numbers, reverse=True)),
-            f_other(populate_other(numbers))]
+            f_other(populate_other(numbers[:]))]
 
 
 if __name__ == "__main__":
@@ -61,12 +61,15 @@ if __name__ == "__main__":
         "media":  (mean_vector, mean_list, mean_ordered_vector, mean_calculator, populate_mean_calculator),
         "mediana": (median_vector, median_list, median_ordered_vector, median_sorted_list, populate_sorted_list),
         "moda": (mode_vector, mode_list, mode_ordered_vector, mode_sorted_list, populate_sorted_list),
-        "permutaciones": (permutations_vector, permutations_list, permutations_ordered_vector, __to_do, __populate_to_do), # TODO: our structure
+        "permutaciones": (permutations_vector, permutations_list, permutations_ordered_vector, permutations_sorted_list, populate_sorted_list),
         "desviacion_estandar": (standard_deviation_vector, standard_deviation_list, standard_deviation_ordered_vector,
-                standard_deviation_STD_calculator, populate_std_calculator),
-        "variaciones_repeticion": (partial(variations_with_repetitions_vector, r=groups), partial(variations_with_repetitions_list, r=groups),
-                                   partial(variations_with_repetitions_ordered_vector, r=groups), __to_do, __populate_to_do),
-        "variaciones": (partial(variations_vector, r=groups), partial(variations_list, r=groups), partial(variations_ordered_vector, r=groups), __to_do, __populate_to_do)
+                                standard_deviation_STD_calculator, populate_std_calculator),
+        "variaciones_repeticion": (partial(variations_with_repetitions_vector, r=groups),
+                                   partial(variations_with_repetitions_list, r=groups),
+                                   partial(variations_with_repetitions_ordered_vector, r=groups),
+                                   __to_do, __populate_to_do),
+        "variaciones": (partial(variations_vector, r=groups), partial(variations_list, r=groups),
+                        partial(variations_ordered_vector, r=groups), __to_do, __populate_to_do)
     }
 
     try:
