@@ -29,6 +29,9 @@ def variations_ordered_vector(ordered_vector, r):
 
 
 def variations_sorted_list(sorted_list, r):
-    return variations_vector(sorted_list, r)
-
-# TODO: our structure(done?)
+    vector = []
+    i = 0
+    for element in sorted_list:
+        vector[i] = element
+        i += 1
+    return variations_vector(vector, r)

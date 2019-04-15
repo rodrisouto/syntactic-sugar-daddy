@@ -25,6 +25,8 @@ def permutations_ordered_vector(ordered_vector):
 
 def permutations_sorted_list(sorted_list):
     vector = []
+    i = 0
     for element in sorted_list:
-        vector.append(element)
+        vector[i] = element
+        i += 1
     return permutations_vector(vector)

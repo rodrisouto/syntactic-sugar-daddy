@@ -29,6 +29,9 @@ def variations_with_repetitions_ordered_vector(ordered_vector, r):
 
 
 def variations_with_repetitions_sorted_list(sorted_list, r):
-    return variations_with_repetitions_vector(sorted_list)
-
-# TODO: our structure (done?)
+    vector = []
+    i = 0
+    for element in sorted_list:
+        vector[i] = element
+        i += 1
+    return variations_with_repetitions_vector(vector)
