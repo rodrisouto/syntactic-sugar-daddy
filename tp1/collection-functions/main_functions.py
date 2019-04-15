@@ -3,6 +3,8 @@ import sys
 
 from functools import partial
 
+sys.path.append('../utils/')
+
 from MeanCalculator import populate_mean_calculator
 from StdDeviationCalculator import populate_std_calculator
 from SortedList import populate_sorted_list
