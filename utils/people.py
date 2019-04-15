@@ -4,18 +4,21 @@ class Person:
         self.partner = None
         self.preferences = None
         self.name = name
+        self.positions = {}
 
     def __repr__(self):
         return '( Person2: ' + self.name + ' | ' + str(len(self.preferences)) + ' )'
 
     def set_preferences(self, people):
-        self.preferences = people
+        for i in range(len(people)):
+            self.positions[people[i]] = i
+        self.preferences = people[::-1]
 
     def get_preferred(self):
-        return self.preferences[0]
+        return self.preferences[-1]
 
     def pop_preferred(self):
-        return self.preferences.pop(0)
+        return self.preferences.pop()
 
     def is_free(self):
         return not self.partner
@@ -24,8 +27,8 @@ class Person:
         self.partner = other_person
 
     def prefers(self, other_person):
-        i1 = self.preferences.index(other_person)
-        i2 = self.preferences.index(self.partner)
+        i1 = self.positions[other_person]
+        i2 = self.positions[self.partner]
         value = True if (i1 < i2) else False
         return value
 

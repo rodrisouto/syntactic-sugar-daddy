@@ -1,5 +1,5 @@
 from gale_shapley import gale_shapley
-from people_simple import Person
+from people import Person
 from stable_matching import is_stable
 
 def gale_shapley_one_posible_solution():
@@ -28,7 +28,7 @@ def gale_shapley_prefers():
     w2.set_preferences([m1, m2])
     m1.set_preferences([w1, w2])
     m2.set_preferences([w1, w2])
-    assert (gale_shapley([m1, m2]) == {(m2, w1), (m1, w2)})
+    assert (gale_shapley([m1, m2]) == {(m1, w2), (m2, w1)})
     w1.set_preferences([m2, m1])
     w2.set_preferences([m1, m2])
     m1.set_preferences([w1, w2])
@@ -92,7 +92,7 @@ def gale_shapley_with_3():
     assert (is_stable({(m1, w2), (m2, w3), (m3, w1)}))
 
 
-
+gale_shapley_one_posible_solution()
 gale_shapley_prefers()
 gale_shapley_one_posible_solution()
 gale_shapley_two_stables_first()
