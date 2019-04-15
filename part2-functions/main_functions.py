@@ -60,7 +60,7 @@ if __name__ == "__main__":
         "mediana": (median_vector, median_list, median_ordered_vector, median_sorted_list, populate_sorted_list),
         "moda": (mode_vector, mode_list, mode_ordered_vector, mode_sorted_list, populate_sorted_list),
         "permutaciones": (permutations_vector, permutations_list, permutations_ordered_vector, __to_do, __populate_to_do), # TODO: our structure
-        "std": (standard_deviation_vector, standard_deviation_list, standard_deviation_ordered_vector,
+        "desviacion_estandar": (standard_deviation_vector, standard_deviation_list, standard_deviation_ordered_vector,
                 standard_deviation_STD_calculator, populate_std_calculator),
         "variaciones_repeticion": (partial(variations_with_repetitions_vector, r=groups), partial(variations_with_repetitions_list, r=groups),
                                    partial(variations_with_repetitions_ordered_vector, r=groups), __to_do, __populate_to_do),
