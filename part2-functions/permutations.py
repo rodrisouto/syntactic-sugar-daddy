@@ -25,3 +25,5 @@ def permutations_list(linked_list):
 def permutations_ordered_vector(ordered_vector):
     #same
     return permutations_vector(ordered_vector)
+
+# TODO: our structure

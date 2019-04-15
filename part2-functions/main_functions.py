@@ -1,6 +1,8 @@
 
 import sys
 
+from functools import partial
+
 from MeanCalculator import populate_mean_calculator
 from StdDeviationCalculator import populate_std_calculator
 from SortedList import populate_sorted_list
@@ -11,6 +13,8 @@ from mode import mode_vector, mode_sorted_list, mode_ordered_vector, mode_list
 from permutations import permutations_vector, permutations_list, permutations_ordered_vector
 from standard_deviation import standard_deviation_STD_calculator, standard_deviation_ordered_vector, \
     standard_deviation_list, standard_deviation_vector
+from variations_with_repetitions import variations_with_repetitions_vector, variations_with_repetition_list, \
+    variations_with_ordered_vector
 
 
 def get_from_file(file_name):
@@ -19,6 +23,14 @@ def get_from_file(file_name):
         for line in file:
             numbers.append(int(line))
     return numbers
+
+
+def __populate_to_do(list):
+    return list
+
+
+def __to_do(list):
+    return "TODO"
 
 
 # populate_other recieves a list and returns the structure needed by f_other
@@ -37,13 +49,20 @@ if __name__ == "__main__":
     numbers = get_from_file(sys.argv[1])
     func_name = sys.argv[2]
 
+    groups = 1
+    if func_name in ["variaciones", "variaciones_repeticion"]:
+        groups = int(input("Ingrese el tamaño de los grupos (menor o igual a {}): ".format(len(numbers))))
+
     func_args = {
         "maximo": (max_vector, max_list, max_ordered_vector, max_heap, populate_heap),
         "media":  (mean_vector, mean_list, mean_ordered_vector, mean_calculator, populate_mean_calculator),
         "mediana": (median_vector, median_list, median_ordered_vector, median_sorted_list, populate_sorted_list),
         "moda": (mode_vector, mode_list, mode_ordered_vector, mode_sorted_list, populate_sorted_list),
-        "permutaciones": (permutations_vector, permutations_list, permutations_ordered_vector, mode_sorted_list, populate_sorted_list), # TODO: our structure
-        "std": (standard_deviation_vector, standard_deviation_list, standard_deviation_ordered_vector, standard_deviation_STD_calculator, populate_std_calculator)
+        "permutaciones": (permutations_vector, permutations_list, permutations_ordered_vector, __to_do, __populate_to_do), # TODO: our structure
+        "std": (standard_deviation_vector, standard_deviation_list, standard_deviation_ordered_vector,
+                standard_deviation_STD_calculator, populate_std_calculator),
+        "variaciones_repeticion": (partial(variations_with_repetitions_vector, r=groups), partial(variations_with_repetition_list, r=groups),
+                                   partial(variations_with_ordered_vector, r=groups), __to_do, __populate_to_do),
     }
 
     try:
