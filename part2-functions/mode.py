@@ -1,19 +1,17 @@
 def mode_vector(vector):
-    appearances = {}
+    appearances = dict()
     for i in range(len(vector)):
-        if not vector[i] in appearances:
-            appearances[vector[i]] = 0
-        appearances[vector[i]] += 1
-
-    max = sorted(appearances.values())[-1]
-    if max == 1:
-        return []
-
-    numbers = []
-    for element in appearances.items():
-        if element[1] == max:
-            numbers.append(element[0])
-    return numbers
+        element = vector[i]
+        appearances[element] = appearances.get(element, 0) + 1
+    mode = set()
+    max = vector[0]
+    for k, v in appearances.items():
+        if v > max:
+            mode = {k}
+            max = v
+        if v == max:
+            mode.add(k)
+    return mode
 
 
 def mode_list(linked_list):
