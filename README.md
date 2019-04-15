@@ -12,7 +12,7 @@ $ python3 main.py 4 players.csv random
 ```
 
 ### Parte II: Funciones matemáticas / estadísticas
-####Try it with:
+#### Try it with:
 ```
 python3 main_functions file.txt function
 ```
