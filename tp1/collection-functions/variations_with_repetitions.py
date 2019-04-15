@@ -32,6 +32,6 @@ def variations_with_repetitions_sorted_list(sorted_list, r):
     vector = []
     i = 0
     for element in sorted_list:
-        vector[i] = element
+        vector.insert(i, element)
         i += 1
-    return variations_with_repetitions_vector(vector)
+    return variations_with_repetitions_vector(vector, r)

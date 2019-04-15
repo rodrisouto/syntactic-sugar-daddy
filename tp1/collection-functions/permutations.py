@@ -27,6 +27,6 @@ def permutations_sorted_list(sorted_list):
     vector = []
     i = 0
     for element in sorted_list:
-        vector[i] = element
+        vector.insert(i, element)
         i += 1
     return permutations_vector(vector)

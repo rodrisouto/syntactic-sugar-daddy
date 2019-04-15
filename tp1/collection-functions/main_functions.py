@@ -68,9 +68,9 @@ if __name__ == "__main__":
         "variaciones_repeticion": (partial(variations_with_repetitions_vector, r=groups),
                                    partial(variations_with_repetitions_list, r=groups),
                                    partial(variations_with_repetitions_ordered_vector, r=groups),
-                                   variations_with_repetitions_sorted_list, populate_sorted_list),
+                                   partial(variations_with_repetitions_sorted_list, r=groups), populate_sorted_list),
         "variaciones": (partial(variations_vector, r=groups), partial(variations_list, r=groups),
-                        partial(variations_ordered_vector, r=groups), variations_sorted_list, populate_sorted_list)
+                        partial(variations_ordered_vector, r=groups), partial(variations_sorted_list, r=groups), populate_sorted_list)
     }
 
     try:
