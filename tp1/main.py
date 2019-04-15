@@ -4,8 +4,8 @@ from random import shuffle
 from itertools import groupby
 from typing import List, Any
 
-sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/utils/')
-sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/gale-shapley/')
+sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/tp1/utils/')
+sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/tp1/gale-shapley/')
 from people import Person
 from gale_shapley import gale_shapley
 
@@ -27,7 +27,6 @@ def solve_tie_alphabetically(list):
 
 def solve_tie_randomly(list):
     shuffle(list)
-    if len(list) > 1: print(list)
     return list
 
 
@@ -56,8 +55,6 @@ def obtain_players(players_names, preferences):
 
     for players_name in players_names:
         set_preferences_for_player(players_name, preferences, players_dict)
-
-    print(players)
 
     return players
 
@@ -130,6 +127,13 @@ def solve_tied_preferences(tied_preferences, tie_solver_method):
     return preferences
 
 
+def print_matches(pairs):
+    print('The matches for the tournament are:')
+    for pair in pairs:
+        final_pair = tuple(map(lambda x: x.name, pair))
+        print('\t' + str(final_pair))
+
+
 if __name__ == '__main__':
 
     assert len(sys.argv) == 4, 'Three parameters are required.'
@@ -148,35 +152,14 @@ if __name__ == '__main__':
         'In the players file there must be the same number of players as passed in parameters.'
 
     tied_preferences = obtain_tied_preferences(raw_players)
-    print(tied_preferences)
-
     preferences = solve_tied_preferences(tied_preferences, tie_solver_method)
-    print(preferences)
-    print()
 
     players_names = list(map(lambda x: x[1], raw_players))
-
     players = obtain_players(players_names, preferences)
-
-    print('API Validation')
-    print('Players: ' + str(players))
-    print()
-    for p in players:
-        print(p.get_preferred())
-    print()
 
     half = int(number_of_players / 2)
     best_half = players[:half]
     worst_half = players[half:]
 
-    print(best_half)
-    print(worst_half)
-
-    #
-    pairs = gale_shapley(best_half)
-    print()
-    print('The matches for the tournament are:')
-    for pair in pairs:
-        final_pair = tuple(map(lambda x: x.name, pair))
-        print('\t' + str(final_pair))
-    print()
+    matches = gale_shapley(best_half)
+    print_matches(matches)

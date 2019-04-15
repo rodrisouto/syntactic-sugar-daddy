@@ -7,13 +7,18 @@
 
 ### Parte I: El Club “PICA-PICA”
 #### Try it with:
-```
-$ python3 main.py 4 players.csv random
+```bash
+# From top directory.
+cd tp1
+# Can use random or alphabetic as tie solvers.
+python3 main.py 4 players.csv random
 ```
 
 ### Parte II: Funciones matemáticas / estadísticas
 #### Try it with:
-```
+```bash
+# From top directory.
+cd tp1/collection-functions
 python3 main_functions file.txt function
 ```
 - file.txt: archivo de entrada, un número por línea.

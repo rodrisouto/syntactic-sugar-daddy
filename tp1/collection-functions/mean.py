@@ -22,4 +22,3 @@ def mean_ordered_vector(ordered_vector):
 
 def mean_calculator(mean_calculator):
     return mean_calculator.get_mean()
-

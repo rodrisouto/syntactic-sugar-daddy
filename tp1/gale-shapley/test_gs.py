@@ -2,6 +2,7 @@ from gale_shapley import gale_shapley
 from people import Person
 from stable_matching import is_stable
 
+
 def gale_shapley_one_posible_solution():
     w1 = Person("w1")
     w2 = Person("w2")

@@ -1,5 +1,4 @@
 
-
 class SortedListIterator:
     def __init__(self, sorted_list):
         self.curr = sorted_list.head
