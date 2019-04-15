@@ -1,5 +1,9 @@
-from gale_shapley import gale_shapley
+import sys
+
+sys.path.append('../utils/')
+
 from people import Person
+from gale_shapley import gale_shapley
 from stable_matching import is_stable
 
 

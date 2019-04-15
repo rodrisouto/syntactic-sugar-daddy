@@ -8,6 +8,7 @@ sys.path.append('./utils/')
 sys.path.append('./gale-shapley/')
 from people import Person
 from gale_shapley import gale_shapley
+from stable_matching import is_stable
 
 
 flatten = lambda l: [item for sublist in l for item in sublist]
@@ -127,11 +128,16 @@ def solve_tied_preferences(tied_preferences, tie_solver_method):
     return preferences
 
 
-def print_matches(pairs):
+def print_matches(matches):
     print('The matches for the tournament are:')
-    for pair in pairs:
-        final_pair = tuple(map(lambda x: x.name, pair))
-        print('\t' + str(final_pair))
+    for match in matches:
+        final_match = tuple(map(lambda x: x.name, match))
+        print('\t' + str(final_match))
+
+
+def weakly_stable_matching_validator(matches):
+    matching_is_weakly_stable = str(is_stable(matches))
+    print('Validation that matching is weakly stable: ' + matching_is_weakly_stable)
 
 
 def solve_matching_problem(raw_players):
@@ -146,6 +152,8 @@ def solve_matching_problem(raw_players):
 
     matches = gale_shapley(best_half)
     print_matches(matches)
+    print()
+    weakly_stable_matching_validator(matches)
 
 
 if __name__ == '__main__':
