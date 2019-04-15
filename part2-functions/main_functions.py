@@ -13,8 +13,9 @@ from mode import mode_vector, mode_sorted_list, mode_ordered_vector, mode_list
 from permutations import permutations_vector, permutations_list, permutations_ordered_vector
 from standard_deviation import standard_deviation_STD_calculator, standard_deviation_ordered_vector, \
     standard_deviation_list, standard_deviation_vector
-from variations_with_repetitions import variations_with_repetitions_vector, variations_with_repetition_list, \
-    variations_with_ordered_vector
+from variations import variations_vector, variations_list, variations_ordered_vector
+from variations_with_repetitions import variations_with_repetitions_vector, \
+    variations_with_repetitions_ordered_vector, variations_with_repetitions_list
 
 
 def get_from_file(file_name):
@@ -61,8 +62,9 @@ if __name__ == "__main__":
         "permutaciones": (permutations_vector, permutations_list, permutations_ordered_vector, __to_do, __populate_to_do), # TODO: our structure
         "std": (standard_deviation_vector, standard_deviation_list, standard_deviation_ordered_vector,
                 standard_deviation_STD_calculator, populate_std_calculator),
-        "variaciones_repeticion": (partial(variations_with_repetitions_vector, r=groups), partial(variations_with_repetition_list, r=groups),
-                                   partial(variations_with_ordered_vector, r=groups), __to_do, __populate_to_do),
+        "variaciones_repeticion": (partial(variations_with_repetitions_vector, r=groups), partial(variations_with_repetitions_list, r=groups),
+                                   partial(variations_with_repetitions_ordered_vector, r=groups), __to_do, __populate_to_do),
+        "variaciones": (partial(variations_vector, r=groups), partial(variations_list, r=groups), partial(variations_ordered_vector, r=groups), __to_do, __populate_to_do)
     }
 
     try:
