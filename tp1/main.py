@@ -134,6 +134,21 @@ def print_matches(pairs):
         print('\t' + str(final_pair))
 
 
+def solve_matching_problem(raw_players):
+    tied_preferences = obtain_tied_preferences(raw_players)
+    preferences = solve_tied_preferences(tied_preferences, tie_solver_method)
+
+    players_names = list(map(lambda x: x[1], raw_players))
+    players = obtain_players(players_names, preferences)
+
+    half = int(number_of_players / 2)
+    best_half = players[:half]
+    worst_half = players[half:]
+
+    matches = gale_shapley(best_half)
+    print_matches(matches)
+
+
 if __name__ == '__main__':
 
     assert len(sys.argv) == 4, 'Three parameters are required.'
@@ -151,15 +166,4 @@ if __name__ == '__main__':
     assert number_of_players == len(raw_players), \
         'In the players file there must be the same number of players as passed in parameters.'
 
-    tied_preferences = obtain_tied_preferences(raw_players)
-    preferences = solve_tied_preferences(tied_preferences, tie_solver_method)
-
-    players_names = list(map(lambda x: x[1], raw_players))
-    players = obtain_players(players_names, preferences)
-
-    half = int(number_of_players / 2)
-    best_half = players[:half]
-    worst_half = players[half:]
-
-    matches = gale_shapley(best_half)
-    print_matches(matches)
+    solve_matching_problem(raw_players)

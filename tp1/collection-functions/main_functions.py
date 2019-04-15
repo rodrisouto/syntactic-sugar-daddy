@@ -77,6 +77,3 @@ if __name__ == "__main__":
     with open("resultado.txt", 'w') as file:
         file.write("\n".join([str(x) for x in results]))
     exit(0)
-
-
-
