@@ -4,8 +4,8 @@ from random import shuffle
 from itertools import groupby
 from typing import List, Any
 
-sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/tp1/utils/')
-sys.path.append('/home/rodrigosouto/projects/facultad/tda/syntactic-sugar-daddy/tp1/gale-shapley/')
+sys.path.append('./utils/')
+sys.path.append('./gale-shapley/')
 from people import Person
 from gale_shapley import gale_shapley
 
@@ -143,7 +143,6 @@ def solve_matching_problem(raw_players):
 
     half = int(number_of_players / 2)
     best_half = players[:half]
-    worst_half = players[half:]
 
     matches = gale_shapley(best_half)
     print_matches(matches)
