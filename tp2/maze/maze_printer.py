@@ -34,12 +34,15 @@ def add_adjacents_to_ui_maze(ui_maze, maze: Grafo, n_rows, n_columns):
                 ui_maze[ui_pos(i) + (r-i)][ui_pos(j) + (c-j)] = ' '
 
 
-def do_print_maze(ui_maze):
-    for ui_row in ui_maze:
-        print(''.join([str(x) for x in ui_row]))
+def ui_row_to_string(ui_row):
+    return ''.join([str(x) for x in ui_row])
 
 
-def print_maze(maze: Grafo, n_rows, n_columns):
+def ui_maze_to_string(ui_maze):
+    return '\n'.join(ui_row_to_string(ui_row) for ui_row in ui_maze)
+
+
+def maze_to_string(maze: Grafo, n_rows, n_columns):
 
     ui_n_rows = (2 * n_rows) + 1
     ui_n_columns = (2 * n_columns) + 1
@@ -49,7 +52,7 @@ def print_maze(maze: Grafo, n_rows, n_columns):
     initialize_ui_maze_with_no_edges(ui_maze, ui_n_rows, ui_n_columns)
     add_adjacents_to_ui_maze(ui_maze, maze, n_rows, n_columns)
 
-    do_print_maze(ui_maze)
+    return ui_maze_to_string(ui_maze)
 
         
 def maze_main():

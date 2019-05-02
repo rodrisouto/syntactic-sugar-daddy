@@ -1,6 +1,6 @@
 import random
 from grafo import Grafo
-from maze_printer import print_maze
+from maze_printer import maze_to_string
 
 
 def obtain_neighbors(row, column, n_rows, n_columns):
@@ -21,10 +21,11 @@ def obtain_neighbors(row, column, n_rows, n_columns):
 
 def do_generate_maze_with_dfs(maze, n_rows, n_columns):
     visited = set()
+    frontier = []
 
     starting_node = (0, 0)
     visited.add(starting_node)
-    frontier = [starting_node]
+    frontier.append(starting_node)
 
     while len(frontier) != 0:
         v = frontier.pop(random.randrange(len(frontier)))

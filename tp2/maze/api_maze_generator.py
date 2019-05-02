@@ -1,6 +1,6 @@
 import sys
 from maze_generator import generate_maze_with_dfs
-from maze_printer import print_maze
+from maze_printer import maze_to_string
 
 
 MAZE_GENERATORS = {
@@ -23,7 +23,8 @@ def main():
 
     print('Maze generated with ' + maze_generator_method + ':')
     maze = MAZE_GENERATORS[maze_generator_method](n_rows, n_columns)
-    print_maze(maze, n_rows, n_columns)
+    str_maze = maze_to_string(maze, n_rows, n_columns)
+    print(str_maze)
 
 
 if __name__ == '__main__':
