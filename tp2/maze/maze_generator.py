@@ -19,7 +19,7 @@ def obtain_neighbors(row, column, n_rows, n_columns):
     return neighbors
 
 
-def maze_generator_dfs(maze, n_rows, n_columns):
+def do_generate_maze_with_dfs(maze, n_rows, n_columns):
     visited = set()
 
     starting_node = (0, 0)
@@ -39,10 +39,7 @@ def maze_generator_dfs(maze, n_rows, n_columns):
                 maze.agregar_arista(v, w, True)
 
 
-def main():
-    n_rows = 5
-    n_columns = 5
-
+def generate_maze_with_dfs(n_rows, n_columns):
     maze: Grafo = Grafo()
 
     for i in range(0, n_rows):
@@ -50,10 +47,13 @@ def main():
             node = (i, j)
             maze.agregar_vertice(node)
 
-    # remove_nodes_for_exampe_4x4(maze)
-    print('Maze generated with DFS:')
-    maze_generator_dfs(maze, n_rows, n_columns)
-    print_maze(maze, n_rows, n_columns)
+    do_generate_maze_with_dfs(maze, n_rows, n_columns)
+    return maze
+
+
+def main():
+    maze = generate_maze_with_dfs(5, 5)
+    print_maze(maze, 5, 5)
 
 
 if __name__ == '__main__':
