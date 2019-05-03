@@ -51,7 +51,7 @@ def validate_contour(str_maze, ui_n_rows, ui_n_columns):
         if i == ui_n_rows-1:
             j = 0
             for char in line:
-                if j == ui_n_rows-2:
+                if j == ui_n_columns-2:
                     assert char == ' '
                 elif j % 2 == 0:
                     assert char == '+'
