@@ -1,0 +1,10 @@
+Juan,0,150
+Maria,20,100
+Pedro,20,50
+Mariana,50,10
+Julian,60,40
+Matias,70,40
+Julieta,80,80
+Francisco,100,50
+Marcos,120,50
+Enrique,120,30
