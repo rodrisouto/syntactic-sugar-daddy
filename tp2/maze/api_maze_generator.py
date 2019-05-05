@@ -1,10 +1,10 @@
 import sys
-from maze_generator import generate_maze_with_dfs
+from maze_generator import generate_maze_with_dyc, generate_maze_with_dfs
 from maze_printer import maze_to_string
 
 
 MAZE_GENERATORS = {
-    'd&c': None,
+    'd&c': generate_maze_with_dyc,
     'dfs': generate_maze_with_dfs
 }
 
