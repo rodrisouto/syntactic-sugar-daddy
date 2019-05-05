@@ -12,8 +12,8 @@ class StructList:
     def append(self, e):
         return self._inner_list.append(e)
 
-    def pop(self):
-        return self._inner_list.pop()
+    def pop(self, pos):
+        return self._inner_list.pop(pos)
 
 
 class StructArray:

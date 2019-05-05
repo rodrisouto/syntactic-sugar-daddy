@@ -2,11 +2,12 @@ import random
 import math
 from grafo import Grafo
 from maze_printer import maze_to_string
+from data_structs import StructList
 
 
 def add_nodes_to_maze(maze, n_rows, n_columns):
-    for i in range(0, n_rows):
-        for j in range(0, n_columns):
+    for i in range(n_rows):
+        for j in range(n_columns):
             node = (i, j)
             maze.agregar_vertice(node)
 
@@ -24,12 +25,12 @@ def obtain_neighbors(row, column, n_rows, n_columns):
         neighbors.append((row, column + 1))
 
     random.shuffle(neighbors)
-    return neighbors
+    return StructList(neighbors)
 
 
 def do_generate_maze_with_dfs(maze, n_rows, n_columns):
     visited = set()
-    frontier = []
+    frontier = StructList([])
 
     starting_node = (0, 0)
     visited.add(starting_node)
@@ -49,10 +50,9 @@ def do_generate_maze_with_dfs(maze, n_rows, n_columns):
 
 
 def generate_maze_with_dfs(n_rows, n_columns):
-    maze: Grafo = Grafo()
-    add_nodes_to_maze(maze, n_rows, n_columns)
-
+    maze = initialize_maze(n_rows, n_columns)
     do_generate_maze_with_dfs(maze, n_rows, n_columns)
+
     return maze
 
 
@@ -104,13 +104,20 @@ def _generate_maze_with_dyc(maze, start_row, end_row, start_column, end_column):
 
 
 def generate_maze_with_dyc(n_rows, n_columns):
-    maze: Grafo = Grafo()
-    add_nodes_to_maze(maze, n_rows, n_columns)
+    maze = initialize_maze(n_rows, n_columns)
     _generate_maze_with_dyc(maze, 0, n_rows-1, 0, n_columns-1)
 
     return maze
 
 
+def initialize_maze(n_rows, n_columns):
+    maze: Grafo = Grafo()
+    add_nodes_to_maze(maze, n_rows, n_columns)
+
+    return maze
+
+
+# This is only for debugging.
 def main():
     maze = generate_maze_with_dyc(10, 20)
     print(maze_to_string(maze, 10, 20))
