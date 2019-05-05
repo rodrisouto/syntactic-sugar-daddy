@@ -1,4 +1,4 @@
-
+from binary_search_tree import BST
 from heap import *
 
 
@@ -20,6 +20,9 @@ class Person:
     def __repr__(self):
         return str(self)
 
+    def __lt__(self, other):
+        return self.entry < other.entry
+
 
 class SuspectGroup:
     def __init__(self, suspects, time):
@@ -35,15 +38,18 @@ class SuspectGroup:
 
 def append_if_are_suspects(suspects, people_inside, next_to_leave):
     if 4 < len(people_inside) <= 10:
-        shared_minutes = next_to_leave.minutes_shared_with(people_inside[0])
+        shared_minutes = next_to_leave.minutes_shared_with(people_inside.find_max())
         if 40 <= shared_minutes <= 120:
-            suspects.append(SuspectGroup(people_inside[:], shared_minutes))
+            s = []
+            for person in people_inside:
+                s.append(person)
+            suspects.append(SuspectGroup(s, shared_minutes))
 
 
 # param: list of people ordered by entry time
 def find_suspects(people):
     # people_inside[0] is the first person in
-    people_inside = []
+    people_inside = BST()
     # min heap (ordered by exit time)
     # building[0] is the next person leaving
     building = Heap(key=lambda person: person.exit)
@@ -56,7 +62,7 @@ def find_suspects(people):
             building.pop()
             people_inside.remove(next_to_leave)
             next_to_leave = building.top()
-        people_inside.append(person)
+        people_inside.insert(person)
         building.push(person)
 
     while len(people_inside) > 4:

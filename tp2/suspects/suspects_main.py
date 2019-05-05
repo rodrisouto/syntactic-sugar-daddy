@@ -26,7 +26,8 @@ if __name__ == "__main__":
     if len(sys.argv) == 3:
         output = sys.argv[2]
     elif len(sys.argv) != 2:
-        print("Usage:\n\tpython3 suspects_main.py filename.txt")
+        print("Usage:\n\tpython3 suspects_main.py filename_in.txt [filename_out.txt]")
+        exit(1)
     people = load_file(sys.argv[1])
     suspects = find_suspects(people)
     write_file(output, suspects)
