@@ -1,12 +1,13 @@
 import sys
 from grafo import Grafo
 from maze_printer import maze_to_string
+from data_structs import StructList, StructArray
 
 # TODO !!!! change to vector reconstructed_str_maze.splitlines()
 
 
 def get_and_validate_maze_size(str_maze):
-    str_maze_as_lines = str_maze.splitlines()
+    str_maze_as_lines = StructList(str_maze.splitlines())
 
     ui_n_columns = None
     i = 0
@@ -26,7 +27,7 @@ def get_and_validate_maze_size(str_maze):
 
 
 def validate_contour(str_maze, ui_n_rows, ui_n_columns):
-    str_maze_as_lines = str_maze.splitlines()
+    str_maze_as_lines = StructList(str_maze.splitlines())
 
     i = 0
     for line in str_maze_as_lines:
@@ -63,7 +64,7 @@ def validate_contour(str_maze, ui_n_rows, ui_n_columns):
 
 
 def obtain_adjacents_in_str_maze(str_maze_as_lines, ui_row, ui_column, ui_n_rows, ui_n_columns):
-    adjacents = []
+    adjacents = StructList([])
 
     row = int((ui_row - 1) / 2)
     column = int((ui_column - 1) / 2)
@@ -81,14 +82,15 @@ def obtain_adjacents_in_str_maze(str_maze_as_lines, ui_row, ui_column, ui_n_rows
 
 
 def str_maze_to_maze(str_maze, ui_n_rows, ui_n_columns):
-    str_maze_as_lines = str_maze.splitlines()
+    str_maze_as_lines = StructArray(str_maze.splitlines())
 
     maze = Grafo()
 
-    i = 0
-    for line in str_maze_as_lines:
+    for i in range(len(str_maze_as_lines)):
+        line = str_maze_as_lines[i]
+
         if i % 2 == 1:
-            for j in range(0, len(line)):
+            for j in range(len(line)):
                 if j % 2 == 1:
                     row = int((i - 1) / 2)
                     column = int((j - 1) / 2)
@@ -99,15 +101,13 @@ def str_maze_to_maze(str_maze, ui_n_rows, ui_n_columns):
                     for w in adjacents:
                         maze.agregar_arista((row, column), w, True)
 
-        i = i + 1
-
     return maze
 
 
 def find_path(maze, starting_node, finish_node):
     visited = set()
     fathers = {}
-    stack = []
+    stack = StructList([])
 
     visited.add(starting_node)
     fathers[starting_node] = None
@@ -137,13 +137,15 @@ def find_path(maze, starting_node, finish_node):
 
 
 def print_str_maze_with_path(str_maze, path):
+    str_maze_as_lines = StructArray(str_maze.splitlines())
 
-    str_maze_as_lines = str_maze.splitlines()
     for row, column in path:
         s = str_maze_as_lines[ui_pos(row)]
-        str_maze_as_lines[ui_pos(row)] = s[:ui_pos(column)] + '*' + s[ui_pos(column) + 1:]
+        ui_line_replaced_with_path = s[:ui_pos(column)] + '*' + s[ui_pos(column) + 1:]
+        str_maze_as_lines[ui_pos(row)] = ui_line_replaced_with_path
 
-    for line in str_maze_as_lines:
+    for i in range(len(str_maze_as_lines)):
+        line = str_maze_as_lines[i]
         print(line)
 
 
@@ -151,7 +153,7 @@ def ui_pos(pos):
     return (2 * pos) + 1
 
 
-def solve_maze(str_maze):
+def solve_and_print_maze(str_maze):
     ui_n_rows, ui_n_columns = get_and_validate_maze_size(str_maze)
     validate_contour(str_maze, ui_n_rows, ui_n_columns)
 
@@ -167,15 +169,18 @@ def solve_maze(str_maze):
     print('Longitud: ' + str(len(path)))
 
 
+def read_maze_from_file(filename):
+    with open(filename, 'r') as file:
+        return file.read()
+
+
 def main():
     assert len(sys.argv) == 2, 'Maze file not specified.'
 
     maze_file = sys.argv[1]
+    str_maze = read_maze_from_file(maze_file)
 
-    with open(maze_file, 'r') as file:
-        str_maze = file.read()
-
-    solve_maze(str_maze)
+    solve_and_print_maze(str_maze)
 
 
 if __name__ == '__main__':
