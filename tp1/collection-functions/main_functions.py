@@ -29,14 +29,6 @@ def get_from_file(file_name):
     return numbers
 
 
-def __populate_to_do(list):
-    return list
-
-
-def __to_do(list):
-    return "TODO"
-
-
 # populate_other recieves a list and returns the structure needed by f_other
 def run_all(numbers, f_vector, f_list, f_ord_vector, f_other, populate_other):
     return [f_vector(numbers[:]),

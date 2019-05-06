@@ -12,8 +12,11 @@ class StructList:
     def append(self, e):
         return self._inner_list.append(e)
 
-    def pop(self, pos):
-        return self._inner_list.pop(pos)
+    def pop(self, pos=None):
+        if pos is None:
+            return self._inner_list.pop()
+        else:
+            return self._inner_list.pop(pos)
 
 
 class StructArray:

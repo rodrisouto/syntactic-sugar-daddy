@@ -16,7 +16,6 @@ flatten = lambda l: [item for sublist in l for item in sublist]
 lambda_solve_tie_alphabetically = lambda list: solve_tie_alphabetically(list)
 lambda_solve_tie_randomly = lambda list: solve_tie_randomly(list)
 
-VALID_TIE_SOLVERS = {'alphabetic', 'random'}
 TIE_SOLVERS = {
     'alphabetic': lambda_solve_tie_alphabetically,
     'random': lambda_solve_tie_randomly}
