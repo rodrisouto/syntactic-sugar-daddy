@@ -1,5 +1,7 @@
-#75.29 Teoría de Algoritmos (Advanced Algorithms)
-#### Grupo: syntactic-sugar-daddy
+# 75.29 Teoría de Algoritmos (Advanced Algorithms) 
+### Grupo: syntactic-sugar-daddy
+
+---
 
 ## TP1
 **Enunciado:** <https://algoritmos-rw.github.io/tda/2019-1c/tp1/>
@@ -38,7 +40,7 @@ python3 main_functions file.txt function
 
 **Informe:** <https://docs.google.com/document/d/1nFYM8Y1zf6EJGmZUUowmsTsZ5lmmnx3fFJduSYzAQ-U/edit>
 
-### Parte II: Laberintos”
+### Parte I: Laberintos”
 
 #### Generar laberintos
 ##### Try it with:
@@ -56,4 +58,12 @@ python3 api_maze_generator.py 'd&c' 7 20
 cd tp2/maze
 # Can use d&c or dfs as maze generators.
 python3 api_solve_maze a_maze.txt
+```
+
+### Parte II: El golpe comando
+#### Try it with:
+```bash
+# From top directory.
+cd tp2/suspects
+python3 suspects_main.py filename_in.txt [filename_out.txt]
 ```
