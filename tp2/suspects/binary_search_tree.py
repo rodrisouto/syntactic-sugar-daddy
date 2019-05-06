@@ -57,10 +57,10 @@ class BST:
 
     def remove(self, key):
         node, father = self._get_node_and_father(key)
-        if not node:
+        if node is None:
             raise KeyError()
         self.len -= 1
-        if node.left_child:
+        if node.left_child is not None:
             max_left_node, max_left_father = self._get_max_and_father(node.left_child)
             node.key = max_left_node.key
             if max_left_father is None:
@@ -69,14 +69,14 @@ class BST:
                 max_left_father.right_child = max_left_node.left_child
             return
 
-        if node.right_child:
+        if node.right_child is not None:
             if not father:
                 self.root = node.right_child
             else:
                 father.right_child = node.right_child
             return
 
-        if not father:
+        if father is None:
             self.root = None
         elif father.right_child == node:
             father.right_child = None

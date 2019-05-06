@@ -48,10 +48,8 @@ def append_if_are_suspects(suspects, people_inside, next_to_leave):
 
 # param: list of people ordered by entry time
 def find_suspects(people):
-    # people_inside[0] is the first person in
     people_inside = BST()
     # min heap (ordered by exit time)
-    # building[0] is the next person leaving
     building = Heap(key=lambda person: person.exit)
     # list of SuspectGroups
     suspects = []

@@ -14,7 +14,7 @@ class Stack:
     def peek(self):
         if self.is_empty():
             raise EmptyStackException()
-        return self.data[len(self.data) - 1]
+        return self.data[-1]
 
     def push(self, item):
         self.data.append(item)

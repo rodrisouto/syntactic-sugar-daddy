@@ -21,7 +21,7 @@ def write_file(filename, suspects):
             file.write(str(group) + '\n')
 
 
-if __name__ == "__main__":
+def main():
     output = "sospechosos.txt"
     if len(sys.argv) == 3:
         output = sys.argv[2]
@@ -31,3 +31,7 @@ if __name__ == "__main__":
     people = load_file(sys.argv[1])
     suspects = find_suspects(people)
     write_file(output, suspects)
+
+
+if __name__ == "__main__":
+    main()
