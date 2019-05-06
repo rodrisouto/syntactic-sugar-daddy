@@ -3,8 +3,6 @@ from grafo import Grafo
 from maze_printer import maze_to_string
 from data_structs import StructList, StructArray
 
-# TODO !!!! change to vector reconstructed_str_maze.splitlines()
-
 
 def get_and_validate_maze_size(str_maze):
     str_maze_as_lines = StructList(str_maze.splitlines())
