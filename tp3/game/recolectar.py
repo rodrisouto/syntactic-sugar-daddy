@@ -59,7 +59,7 @@ def main():
     board = load_board(cities_filename, routes_filename)
 
     # cities_names = resolve_cities(player_no, board)
-    filename = 'cosecha{}.txt'.format(player_no)
+    filename = 'cosecha{}.txt\n'.format(player_no)
 
     resolve_harvest(filename, owned_cities)
 
