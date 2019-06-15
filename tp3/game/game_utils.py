@@ -25,9 +25,10 @@ def get_selection_filename(player_no):
 
 def _validate_empire(board, own_empire, rival_empire):
 
-    for city in own_empire:
-        assert city in board.get_nodes(), 'City {} was not in the board: {}.'.format(city, board.get_nodes())
-        assert city not in rival_empire, 'City {} was in the rival empire: {}.'.format(city, rival_empire)
+    for city_name in own_empire:
+        assert city_name in board.get_nodes(), 'City {} was not in the board: {}.'.format(city_name, board.get_nodes())
+        assert city_name not in rival_empire, 'City {} was in the rival empire: {}.'.format(city_name, rival_empire)
+        assert own_empire[city_name] >= 0, 'City {} has less than 0 troops'.format(city_name)
 
 
 def validate_empires(board, empire1, empire2):

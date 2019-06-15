@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+from typing import List
 
 import game_utils
 
@@ -43,7 +44,7 @@ def resolve_all_cities(filename):
 def resolve_empires(selection_1, selection_2):
 
     i, j = 0, 0
-    empire_1, empire_2 = set(), set()
+    empire_1, empire_2 = list(), list()
     assigned_cities = set()
     player_1_chooses = True
 
@@ -54,7 +55,7 @@ def resolve_empires(selection_1, selection_2):
                 player_1_chooses = False
             elif selection_1[i] not in empire_2:
                 city = selection_1[i]
-                empire_1.add(city)
+                empire_1.append(city)
                 assigned_cities.add(city)
                 player_1_chooses = False
             i += 1
@@ -64,7 +65,7 @@ def resolve_empires(selection_1, selection_2):
                 player_1_chooses = True
             elif selection_2[j] not in empire_1:
                 city = selection_2[j]
-                empire_2.add(city)
+                empire_2.append(city)
                 assigned_cities.add(city)
                 player_1_chooses = True
             j += 1
@@ -92,8 +93,8 @@ def main():
     selection_2_filename = sys.argv[4]
 
     all_cities = resolve_all_cities(cities_filename)
-    selection_1 = resolve_selection(selection_1_filename, all_cities)
-    selection_2 = resolve_selection(selection_2_filename, all_cities)
+    selection_1: List[str] = resolve_selection(selection_1_filename, all_cities)
+    selection_2: List[str] = resolve_selection(selection_2_filename, all_cities)
 
     empire_1, empire_2 = resolve_empires(selection_1, selection_2)
 
