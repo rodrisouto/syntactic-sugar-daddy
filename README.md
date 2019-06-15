@@ -9,7 +9,7 @@
 **Informe:** <https://docs.google.com/document/d/1wukVApGxkKssDwqx8ksv96ne0KKz6ubpYY-vP4jp3y8/edit>
 
 ### Parte I: El Club “PICA-PICA”
-#### Try it with:
+##### Try it with:
 ```bash
 # From top directory.
 cd tp1
@@ -18,7 +18,7 @@ python3 main.py 4 players.csv random
 ```
 
 ### Parte II: Funciones matemáticas / estadísticas
-#### Try it with:
+##### Try it with:
 ```bash
 # From top directory.
 cd tp1/collection-functions
@@ -40,7 +40,25 @@ python3 main_functions file.txt function
 
 **Informe:** <https://docs.google.com/document/d/1nFYM8Y1zf6EJGmZUUowmsTsZ5lmmnx3fFJduSYzAQ-U/edit>
 
-### Parte I: Laberintos
+### Parte I: Laberintos”
+
+#### Generar laberintos
+##### Try it with:
+```bash
+# From top directory.
+cd tp2/maze
+# Can use d&c or dfs as maze generators.
+python3 api_maze_generator.py 'd&c' 7 20
+```
+
+#### Resolver laberintos
+##### Try it with:
+```bash
+# From top directory.
+cd tp2/maze
+# Can use d&c or dfs as maze generators.
+python3 api_solve_maze a_maze.txt
+```
 
 ### Parte II: El golpe comando
 #### Try it with:

@@ -28,7 +28,7 @@ def add_adjacents_to_ui_maze(ui_maze, maze: Grafo, n_rows, n_columns):
         for j in range(0, n_columns):
             ui_maze[ui_pos(i)][ui_pos(j)] = ' '
 
-            adjacents = maze.obtener_adyacentes((i, j))
+            adjacents = maze.get_adyacent((i, j))
 
             for r, c in adjacents:
                 ui_maze[ui_pos(i) + (r-i)][ui_pos(j) + (c-j)] = ' '

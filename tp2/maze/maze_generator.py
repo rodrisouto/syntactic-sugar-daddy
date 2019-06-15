@@ -9,7 +9,7 @@ def add_nodes_to_maze(maze, n_rows, n_columns):
     for i in range(n_rows):
         for j in range(n_columns):
             node = (i, j)
-            maze.agregar_vertice(node)
+            maze.add_node(node)
 
 
 def obtain_neighbors(row, column, n_rows, n_columns):
@@ -46,7 +46,7 @@ def do_generate_maze_with_dfs(maze, n_rows, n_columns):
             if w not in visited:
                 visited.add(w)
                 frontier.append(w)
-                maze.agregar_arista(v, w, True)
+                maze.add_edge(v, w, True)
 
 
 def generate_maze_with_dfs(n_rows, n_columns):
@@ -63,7 +63,7 @@ def split_vertically(maze, start_row, end_row, start_column, end_column):
     _generate_maze_with_dyc(maze, middle + 1, end_row, start_column, end_column)
 
     merging_column = random.randrange(start_column, end_column + 1)
-    maze.agregar_arista((middle, merging_column), (middle + 1, merging_column), True)
+    maze.add_edge((middle, merging_column), (middle + 1, merging_column), True)
 
 
 def split_horizontally(maze, start_row, end_row, start_column, end_column):
@@ -73,7 +73,7 @@ def split_horizontally(maze, start_row, end_row, start_column, end_column):
     _generate_maze_with_dyc(maze, start_row, end_row, middle + 1, end_column)
 
     merging_row = random.randrange(start_row, end_row + 1)
-    maze.agregar_arista((merging_row, middle), (merging_row, middle + 1), True)
+    maze.add_edge((merging_row, middle), (merging_row, middle + 1), True)
 
 
 def choose_how_to_split_randomly(maze, start_row, end_row, start_column, end_column):

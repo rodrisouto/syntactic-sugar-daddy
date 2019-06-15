@@ -3,8 +3,6 @@ from grafo import Grafo
 from maze_printer import maze_to_string
 from data_structs import StructList, StructArray
 
-# TODO !!!! change to vector reconstructed_str_maze.splitlines()
-
 
 def get_and_validate_maze_size(str_maze):
     str_maze_as_lines = StructList(str_maze.splitlines())
@@ -94,12 +92,12 @@ def str_maze_to_maze(str_maze, ui_n_rows, ui_n_columns):
                 if j % 2 == 1:
                     row = int((i - 1) / 2)
                     column = int((j - 1) / 2)
-                    maze.agregar_vertice((row, column))
+                    maze.add_node((row, column))
 
                     adjacents = obtain_adjacents_in_str_maze(str_maze_as_lines, i, j, ui_n_rows, ui_n_columns)
 
                     for w in adjacents:
-                        maze.agregar_arista((row, column), w, True)
+                        maze.add_edge((row, column), w, True)
 
     return maze
 
@@ -119,7 +117,7 @@ def find_path(maze, starting_node, finish_node):
         if v == finish_node:
             break
 
-        for w in maze.obtener_adyacentes(v):
+        for w in maze.get_adyacent(v):
             if w not in visited:
                 visited.add(w)
                 fathers[w] = v
