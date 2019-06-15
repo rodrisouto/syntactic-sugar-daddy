@@ -93,3 +93,41 @@ def resolve_harvests(player_no, harvest_1_filename, harvest_2_filename):
         return harvest_1, harvest_2
     else:
         return harvest_2, harvest_1
+
+
+def resolve_attack(attack_filename):
+
+    attack = []
+
+    with open(attack_filename, 'r') as file:
+        for line in file:
+            if line == '':
+                continue
+
+            attack_tuple = line.split(',')
+            assert len(attack_tuple) == 3, 'Error {}'.format(attack_tuple)
+            src_city = attack_tuple[0]
+            dst_city = attack_tuple[1]
+            troops = int(attack_tuple[2])
+            assert troops > 0, 'Troops can not be negative {}'.format(attack_tuple)
+
+            attack.append((src_city, dst_city, troops))
+
+    return attack
+
+def resolve_attacks(attack_1_filename, attack_2_filename):
+    return resolve_attack(attack_1_filename), resolve_attack(attack_2_filename)
+
+
+def _validate_attack(own_empire, rival_empire, attack):
+
+    for atk in attack:
+        assert len(atk) == 3, 'Error in atk len {}'.format(atk)
+        assert atk[0] in own_empire, 'Source City was not in own empire {}, {}'.format(atk, own_empire)
+        assert atk[1] in rival_empire, 'Destination City was not in own empire {}, {}'.format(atk, rival_empire)
+        assert atk[2] > 0, 'Troops can not be negative {}'.format(atk)
+
+
+def validate_attacks(empire_1, empire_2, attack_1, attack_2):
+    _validate_attack(empire_1, empire_2, attack_1)
+    _validate_attack(empire_2, empire_1, attack_2)
