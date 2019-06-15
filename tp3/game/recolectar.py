@@ -2,7 +2,7 @@
 
 import sys
 
-from load_board import load_board
+import game_utils
 
 
 # TODO do Fluxily
@@ -56,7 +56,7 @@ def main():
     owned_cities_filename = sys.argv[4]
 
     owned_cities = obtain_owned_cities(owned_cities_filename)
-    board = load_board(cities_filename, routes_filename)
+    board = game_utils.load_board(cities_filename, routes_filename)
 
     # cities_names = resolve_cities(player_no, board)
     filename = 'cosecha{}.txt\n'.format(player_no)

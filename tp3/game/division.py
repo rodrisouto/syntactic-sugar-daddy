@@ -2,6 +2,8 @@
 
 import sys
 
+import game_utils
+
 
 def validate_selection(selection, all_cities):
 
@@ -76,7 +78,7 @@ def resolve_empires(selection_1, selection_2):
 
 def save_empire(empire, empire_no):
 
-    with open('imperio{}.txt'.format(empire_no), 'w') as file:
+    with open(game_utils.get_empire_filename(empire_no), 'w') as file:
         for city in empire:
             file.write('{},1\n'.format(city))
 

@@ -2,7 +2,7 @@
 
 import sys
 
-from load_board import load_board
+import game_utils
 
 
 # TODO do right
@@ -47,10 +47,10 @@ def main():
     cities_filename = sys.argv[2]
     routes_filename = sys.argv[3]
 
-    board = load_board(cities_filename, routes_filename)
+    board = game_utils.load_board(cities_filename, routes_filename)
 
     cities_names = resolve_cities(player_no, board)
-    filename = 'seleccion{}.txt'.format(player_no)
+    filename = game_utils.get_selection_filename(player_no)
 
     print_cities(filename, cities_names)
 
