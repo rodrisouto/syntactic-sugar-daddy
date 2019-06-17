@@ -1,6 +1,27 @@
 #!/usr/bin/env python3
 
+from typing import Dict, Tuple
+
 from load_board import load_board as do_load_board
+
+from city import City
+from empire import Empire
+
+
+def get_harvest_limit_to_win():
+    return 100
+
+
+def get_rounds_limit():
+    return 50
+
+
+def get_no_winner():
+    return ''
+
+
+def get_winner_file():
+    return 'ganador.txt'
 
 
 def get_empire_filename(player_no):
@@ -23,12 +44,16 @@ def get_selection_filename(player_no):
     return 'seleccion{}.txt'.format(player_no)
 
 
+def get_attack_filename(player_no):
+    return 'ataque{}.txt'.format(player_no)
+
+
 def _validate_empire(board, own_empire, rival_empire):
 
-    for city_name in own_empire:
-        assert city_name in board.get_nodes(), 'City {} was not in the board: {}.'.format(city_name, board.get_nodes())
-        assert city_name not in rival_empire, 'City {} was in the rival empire: {}.'.format(city_name, rival_empire)
-        assert own_empire[city_name] >= 0, 'City {} has less than 0 troops'.format(city_name)
+    for city_name in own_empire.get_original_troops_at_loading():
+        assert city_name in board, 'City {} was not in the board: {}.'.format(city_name, board.get_nodes())
+        assert city_name not in rival_empire.get_original_troops_at_loading(), 'City {} was in the rival empire: {}.'.format(city_name, rival_empire)
+        assert own_empire.get_original_troops_at_loading()[city_name] >= 0, 'City {} has less than 0 troops'.format(city_name)
 
 
 def validate_empires(board, empire1, empire2):
@@ -37,13 +62,15 @@ def validate_empires(board, empire1, empire2):
     _validate_empire(board, empire2, empire1)
 
 
-def load_board(cities_filename, routes_filename):
+def load_empty_board(cities_filename, routes_filename):
     return do_load_board(cities_filename, routes_filename)
 
 
-def resolve_empire(empire_filename):
+def resolve_empire(player_no, empire_filename) -> Empire:
 
-    empire = {}
+    cities_counter = 0
+    metropolis = None
+    empire_troops = {}
 
     file = open(empire_filename)
 
@@ -57,18 +84,23 @@ def resolve_empire(empire_filename):
             print('\n\n{}\n\n'.format(city))
             raise ValueError('not enough values to unpack.')
 
-        if city_name in empire:
-            raise Exception('City {} was already in the empire.'.format(city_name))
+        assert city_name not in empire_troops, 'City {} was already in the empire.'.format(city_name)
 
-        empire[city_name] = int(troops)
+        if cities_counter == 0:
+            metropolis = city_name
+
+        empire_troops[city_name] = int(troops)
+        cities_counter += 1
+
+    empire = Empire(player_no, metropolis, empire_troops)
 
     return empire
 
 
-def resolve_empires(player_no, empire_1_filename, empire_2_filename):
+def resolve_empires(player_no: int, empire_1_filename: str, empire_2_filename: str) -> Tuple[Empire, Empire]:
 
-    empire_1: dict = resolve_empire(empire_1_filename)
-    empire_2: dict = resolve_empire(empire_2_filename)
+    empire_1: Empire = resolve_empire(1, empire_1_filename)
+    empire_2: Empire = resolve_empire(2, empire_2_filename)
 
     if player_no == 1:
         return empire_1, empire_2
@@ -115,19 +147,38 @@ def resolve_attack(attack_filename):
 
     return attack
 
+
 def resolve_attacks(attack_1_filename, attack_2_filename):
     return resolve_attack(attack_1_filename), resolve_attack(attack_2_filename)
 
 
-def _validate_attack(own_empire, rival_empire, attack):
+def _validate_attack(board, own_empire, rival_empire, attack):
+
+    own_placed_troops = own_empire.get_original_troops_at_loading()
 
     for atk in attack:
         assert len(atk) == 3, 'Error in atk len {}'.format(atk)
-        assert atk[0] in own_empire, 'Source City was not in own empire {}, {}'.format(atk, own_empire)
-        assert atk[1] in rival_empire, 'Destination City was not in own empire {}, {}'.format(atk, rival_empire)
+        assert atk[0] in own_placed_troops, 'Source City was not in own empire {}, {}'.format(atk, own_empire)
+        assert atk[1] in rival_empire.get_original_troops_at_loading(), 'Destination City was not in own empire {}, {}'.format(atk, rival_empire)
         assert atk[2] > 0, 'Troops can not be negative {}'.format(atk)
 
+        assert own_placed_troops[atk[0]] >= atk[2]
+        assert board.are_adjacents(atk[0], atk[1]), 'Cities are not adjacent: {}'.format(atk)
 
-def validate_attacks(empire_1, empire_2, attack_1, attack_2):
-    _validate_attack(empire_1, empire_2, attack_1)
-    _validate_attack(empire_2, empire_1, attack_2)
+
+def validate_attacks(board, empire_1, empire_2, attack_1, attack_2):
+
+    _validate_attack(board, empire_1, empire_2, attack_1)
+    _validate_attack(board, empire_2, empire_1, attack_2)
+
+
+def _assign_cities_of_empire(cities: Dict[str, City], owner, empire_troops):
+
+    for city_name in empire_troops:
+        cities[city_name].assign_owner(owner, empire_troops[city_name])
+
+
+def assign_cities(cities: Dict[str, City], empire_1, empire_2):
+
+    _assign_cities_of_empire(cities, 1, empire_1.get_original_troops_at_loading())
+    _assign_cities_of_empire(cities, 2, empire_2.get_original_troops_at_loading())
