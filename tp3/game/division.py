@@ -13,7 +13,7 @@ def validate_selection(selection, all_cities):
         assert city in all_cities, '{} | {} vs {}'.format(city, selection, all_cities)
 
 
-def resolve_selection(filename, all_cities):
+def load_selection(filename, all_cities):
 
     selection = []
 
@@ -77,7 +77,7 @@ def resolve_empires(selection_1, selection_2):
     return empire_1, empire_2
 
 
-def save_empire(empire, empire_no):
+def print_empire(empire, empire_no):
 
     with open(game_utils.get_empire_filename(empire_no), 'w') as file:
         for city in empire:
@@ -87,22 +87,18 @@ def save_empire(empire, empire_no):
 def main():
 
     cities_filename = sys.argv[1]
-    # TODO preguntar para qué sirve?
     routes_filename = sys.argv[2]
     selection_1_filename = sys.argv[3]
     selection_2_filename = sys.argv[4]
 
     all_cities = resolve_all_cities(cities_filename)
-    selection_1: List[str] = resolve_selection(selection_1_filename, all_cities)
-    selection_2: List[str] = resolve_selection(selection_2_filename, all_cities)
+    selection_1: List[str] = load_selection(selection_1_filename, all_cities)
+    selection_2: List[str] = load_selection(selection_2_filename, all_cities)
 
     empire_1, empire_2 = resolve_empires(selection_1, selection_2)
 
-    print(empire_1)
-    print(empire_2)
-
-    save_empire(empire_1, 1)
-    save_empire(empire_2, 2)
+    print_empire(empire_1, 1)
+    print_empire(empire_2, 2)
 
 
 if __name__ == '__main__':

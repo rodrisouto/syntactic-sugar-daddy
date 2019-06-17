@@ -14,17 +14,13 @@ def resolve_attacks(board, cities, own_empire):
 
     parents, distances = graph_utils.bfs(board, metropolis)
 
-    print()
-    print(parents)
-    print(distances)
-
     return decide_attacks(board, cities, own_empire, distances)
 
 
 def decide_attacks(board, cities, own_empire, distances):
 
     attack = []
-    amount_of_owned_cities = len(own_empire.get_placed_troops())
+    amount_of_owned_cities = len(own_empire.get_original_troops_at_loading())
 
     for distance in distances:
         cities_at_distance = distances[distance]
@@ -59,10 +55,7 @@ def decide_if_attack_city(board, cities, rival_city, player_no):
 
 def print_attack(player_no, attack):
 
-    # !!!!
-    print(attack)
     text = '\n'.join(map(lambda atk: ','.join(atk), attack))
-    print('print_attack: {}'.format(text))
     with open(game_utils.get_attack_filename(player_no), 'w') as file:
         file.write(text)
 
@@ -78,21 +71,11 @@ def main():
     harvest_2_filename = sys.argv[7]
 
     own_empire, rival_empire = game_utils.resolve_empires(player_no, empire_1_filename, empire_2_filename)
-    print(own_empire)
-    print(rival_empire)
     own_harvest, rival_harvest = game_utils.resolve_harvests(player_no, harvest_1_filename, harvest_2_filename)
-    print(own_harvest)
-    print(rival_harvest)
 
     board, cities = game_utils.load_empty_board(cities_filename, routes_filename)
-    print(board)
-    print(board.get_nodes())
-    print(board.get_edges())
 
-    print('cities: ' + str(cities))
     game_utils.assign_cities(cities, own_empire, rival_empire)
-    print()
-    print('cities: ' + str(cities))
 
     game_utils.validate_empires(board, own_empire, rival_empire)
 

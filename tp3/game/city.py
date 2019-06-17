@@ -58,3 +58,6 @@ class City:
     def free_if_troopless(self):
         if self._troops == 0:
             self._owner = None
+
+    def place_troops(self, spice):
+        self._troops += spice * 2

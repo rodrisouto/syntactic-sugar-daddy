@@ -52,8 +52,8 @@ def untie(empire_1, harvest_1, empire_2, harvest_2):
 
     # Untie by amount of cities.
     print('Untie by amount of cities.')
-    len_empire_1 = len(empire_1.get_placed_troops())
-    len_empire_2 = len(empire_2.get_placed_troops())
+    len_empire_1 = len(empire_1.get_original_troops_at_loading())
+    len_empire_2 = len(empire_2.get_original_troops_at_loading())
 
     if len_empire_1 > len_empire_2:
         return empire_1.get_player()
@@ -62,8 +62,8 @@ def untie(empire_1, harvest_1, empire_2, harvest_2):
 
     # Untie by amount of troops.
     print('Untie by amount of troops.')
-    troops_empire_1 = sum(empire_1.get_placed_troops().values())
-    troops_empire_2 = sum(empire_2.get_placed_troops().values())
+    troops_empire_1 = sum(empire_1.get_cities().values())
+    troops_empire_2 = sum(empire_2.get_cities().values())
 
     if troops_empire_1 > troops_empire_2:
         return empire_1.get_player()

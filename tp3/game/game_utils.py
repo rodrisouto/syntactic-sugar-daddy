@@ -50,10 +50,10 @@ def get_attack_filename(player_no):
 
 def _validate_empire(board, own_empire, rival_empire):
 
-    for city_name in own_empire.get_placed_troops():
+    for city_name in own_empire.get_original_troops_at_loading():
         assert city_name in board, 'City {} was not in the board: {}.'.format(city_name, board.get_nodes())
-        assert city_name not in rival_empire.get_placed_troops(), 'City {} was in the rival empire: {}.'.format(city_name, rival_empire)
-        assert own_empire.get_placed_troops()[city_name] >= 0, 'City {} has less than 0 troops'.format(city_name)
+        assert city_name not in rival_empire.get_original_troops_at_loading(), 'City {} was in the rival empire: {}.'.format(city_name, rival_empire)
+        assert own_empire.get_original_troops_at_loading()[city_name] >= 0, 'City {} has less than 0 troops'.format(city_name)
 
 
 def validate_empires(board, empire1, empire2):
@@ -154,12 +154,12 @@ def resolve_attacks(attack_1_filename, attack_2_filename):
 
 def _validate_attack(board, own_empire, rival_empire, attack):
 
-    own_placed_troops = own_empire.get_placed_troops()
+    own_placed_troops = own_empire.get_original_troops_at_loading()
 
     for atk in attack:
         assert len(atk) == 3, 'Error in atk len {}'.format(atk)
         assert atk[0] in own_placed_troops, 'Source City was not in own empire {}, {}'.format(atk, own_empire)
-        assert atk[1] in rival_empire.get_placed_troops(), 'Destination City was not in own empire {}, {}'.format(atk, rival_empire)
+        assert atk[1] in rival_empire.get_original_troops_at_loading(), 'Destination City was not in own empire {}, {}'.format(atk, rival_empire)
         assert atk[2] > 0, 'Troops can not be negative {}'.format(atk)
 
         assert own_placed_troops[atk[0]] >= atk[2]
@@ -180,5 +180,5 @@ def _assign_cities_of_empire(cities: Dict[str, City], owner, empire_troops):
 
 def assign_cities(cities: Dict[str, City], empire_1, empire_2):
 
-    _assign_cities_of_empire(cities, 1, empire_1.get_placed_troops())
-    _assign_cities_of_empire(cities, 2, empire_2.get_placed_troops())
+    _assign_cities_of_empire(cities, 1, empire_1.get_original_troops_at_loading())
+    _assign_cities_of_empire(cities, 2, empire_2.get_original_troops_at_loading())
