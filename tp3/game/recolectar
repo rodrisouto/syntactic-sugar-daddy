@@ -2,10 +2,12 @@
 
 import sys
 
-import game_utils
+import load_board
 
 
 # TODO do Fluxily
+
+
 def obtain_new_harvest(board):
     return 10
 
@@ -14,7 +16,7 @@ def print_harvest(harvest_filename, final_harvest):
 
     file = open(harvest_filename, "w+")
 
-    file.write(final_harvest + '\n')
+    file.write(str(final_harvest))
     file.close()
 
 
@@ -56,10 +58,10 @@ def main():
     owned_cities_filename = sys.argv[4]
 
     owned_cities = obtain_owned_cities(owned_cities_filename)
-    board = game_utils.load_board(cities_filename, routes_filename)
+    board = load_board.load_board(cities_filename, routes_filename)
 
     # cities_names = resolve_cities(player_no, board)
-    filename = 'cosecha{}.txt\n'.format(player_no)
+    filename = 'cosecha{}.txt'.format(player_no)
 
     resolve_harvest(filename, owned_cities)
 
