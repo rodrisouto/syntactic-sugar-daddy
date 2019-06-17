@@ -1,31 +1,51 @@
+from typing import Dict, Any, Union
+import math
+
 from graph import DirectedGraph
 
 
 def start(graph, group, element):
-    for item in graph:
+    for item in graph.get_nodes():
         group[item] = element
 
 
-def BFS(graph, s, t, parent):
-    visited = {}
-    start(graph, visited, False)
+# It has to be a connected graph.
+def bfs(graph, s):
+    visited: Dict[Any, int] = {}
+    parents: Dict[Any, Any] = {}
+    distances: Dict[int, Any] = {}
     queue = []
-    queue.append(s)
-    visited[s] = True
 
-    while queue:
+    start(graph, visited, math.inf)
+    start(graph, parents, None)
+
+    visited[s] = 0
+    parents[s] = None
+    distances[0] = [s]
+    queue.append(s)
+
+    while len(queue) != 0:
         u = queue.pop(0)
         adjacents = graph.get_adjacents(u)
+
         for w in adjacents:
-            if not visited[w]:
+            if visited[w] == math.inf:
+                w_distance = visited[u] + 1
+
+                visited[w] = w_distance
+                parents[w] = u
+
+                if w_distance not in distances:
+                    distances[w_distance] = [w]
+                else:
+                    distances[w_distance].append(w)
+
                 queue.append(w)
-                visited[w] = True
-                parent[w] = u
 
-    return visited[t]
+    return parents, distances
 
 
-def FordFulkerson(graph, source, sink):
+def ford_fulkerson(graph, source, sink):
     parent = {}
     start(graph, parent, None)
     max_flow = 0
@@ -42,7 +62,7 @@ def FordFulkerson(graph, source, sink):
         # update residual capacities of the edges and reverse edges
         # along the path
         v = sink
-        while (v != source):
+        while v != source:
             u = parent[v]
             self.graph[u][v] -= path_flow
             self.graph[v][u] += path_flow

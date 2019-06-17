@@ -47,7 +47,7 @@ def main():
     cities_filename = sys.argv[2]
     routes_filename = sys.argv[3]
 
-    board = game_utils.load_board(cities_filename, routes_filename)
+    board, citie = game_utils.load_empty_board(cities_filename, routes_filename)
 
     cities_names = resolve_cities(player_no, board)
     filename = game_utils.get_selection_filename(player_no)

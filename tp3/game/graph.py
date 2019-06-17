@@ -133,12 +133,13 @@ class DirectedGraph:
 
     def add_edge(self, v, w, arista) -> bool:
         if v not in self._adjacencies.keys():
+            print("!!!! {}", self.get_nodes())
             raise Exception("Node {} is not in the graph.".format(v))
         if w not in self:
             raise Exception("Node {} is not in the graph.".format(w))
         if v == w:
             raise Exception('Nodes {} and {} are the same, reflexive edges are not allowed.'.format(v, w))
-        if self.are_adjacent(v, w):
+        if self.are_adjacents(v, w):
             raise Exception('Nodes {} or {} are already connected.'.format(v, w))
 
         self._adjacencies[v][w] = arista
@@ -177,7 +178,7 @@ class DirectedGraph:
             raise Exception("Node {} is not in the graph.".format(v))
         return self._adjacencies[v].keys()
 
-    def are_adjacent(self, v, w):
+    def are_adjacents(self, v, w):
         if v == w:
             return False
         if v not in self:
