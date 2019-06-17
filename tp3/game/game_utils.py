@@ -33,11 +33,11 @@ def get_empire_temp_filename(player_no):
 
 
 def get_harvest_filename(player_no):
-    return 'harvest{}.txt'.format(player_no)
+    return 'cosecha{}.txt'.format(player_no)
 
 
 def get_harvest_temp_filename(player_no):
-    return 'harvest{}_temp.txt'.format(player_no)
+    return 'cosecha{}_temp.txt'.format(player_no)
 
 
 def get_selection_filename(player_no):

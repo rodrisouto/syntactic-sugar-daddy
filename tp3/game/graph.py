@@ -147,15 +147,14 @@ class DirectedGraph:
 
     def remove_edge(self, v, w):
         if v not in self or w not in self:
-            return None
+            raise Exception("Node {} is already in the graph.".format(v))
         if w not in self._adjacencies[v]:
-            return None
-        self._adjacencies[v].pop(w)
-        edge = self._adjacencies[w].pop(v)
-        try:
-            self._edges.remove((v, w, edge))
-        except:
-            self._edges.remove((w, v, edge))
+            raise Exception("Node {} is already in the graph.".format(w))
+
+        edge = self._adjacencies[v].pop(w)
+
+        self._edges.remove((v, w, edge))
+
         return edge
 
     def add_node(self, v) -> bool:
@@ -193,7 +192,7 @@ class DirectedGraph:
     def get_edges(self):
         return self._edges
 
-    def see_edge(self, v, w):
+    def get_edge(self, v, w):
         if v not in self:
             raise Exception("Node {} is not in the graph.".format(v))
         if w not in self:
