@@ -14,7 +14,7 @@ do
     ./recolectar 2 ciudades.txt rutas.txt imperio2.txt
 
     ./producir 1 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
-    ./producir 2 ciudades.txt rutas.txt imperio2.txt cosecha2.txt imperio1.txt cosecha1.txt
+    ./producir 2 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
 
     mv ./imperio1_temp.txt imperio1.txt
     mv ./imperio2_temp.txt imperio2.txt
@@ -22,9 +22,9 @@ do
     mv ./harvest2_temp.txt cosecha2.txt
 
     ./tactica 1 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
-    ./tactica 2 ciudades.txt rutas.txt imperio2.txt cosecha2.txt imperio1.txt cosecha1.txt
+    ./tactica 2 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
 
-    contienda ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
+    ./contienda ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
 
     ./ganador ${ronda} ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
     if [[ -s ./ganador.txt ]]
