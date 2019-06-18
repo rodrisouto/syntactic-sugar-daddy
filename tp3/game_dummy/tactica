@@ -12,10 +12,10 @@ def resolve_attacks(board, cities, own_empire):
 
     attack = []
 
-    for city_name in own_empire:
+    for city_name in own_empire.get_original_troops_at_loading():
         for adjacent in board.get_adjacents(city_name):
             if cities[adjacent].get_owner() != own_empire.get_player():
-                attack.append((city_name, adjacent, cities[city_name].get_troops()))
+                attack.append((city_name, adjacent, str(cities[city_name].get_troops())))
                 break
 
     return attack
