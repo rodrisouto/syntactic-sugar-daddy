@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+import sys
+
+import game_utils
+import graph_utils
+
+from graph import DirectedGraph
+
+
+def obtain_graph_for_ff(board_with_own_cities, metropolis):
+
+    board_without_double_connections = \
+        graph_utils.generate_directed_graph_without_double_connections(board_with_own_cities, metropolis)
+
+    adjacents_of_metropolis = list(board_without_double_connections.get_adjacents(metropolis))
+
+    for adjacent in adjacents_of_metropolis:
+        board_without_double_connections.remove_edge(metropolis, adjacent)
+
+    return board_without_double_connections
+
+
+def obtain_new_harvest(board, cities, empire):
+
+    own_cities = set(empire.get_original_troops_at_loading().keys())
+    board_with_own_cities = graph_utils.generate_directed_subgraph(board, own_cities)
+
+    board_without_double_connections = obtain_graph_for_ff(board_with_own_cities, empire.get_metropolis())
+
+    sources = list(filter(lambda x: cities[x].get_spices() > 0 and cities[x].get_name() != empire.get_metropolis(), own_cities))
+    sources_limit = dict(map(lambda x: (x, cities[x].get_spices()), sources))
+
+    new_harvest = \
+        graph_utils.ford_fulkerson_multiple_sources_and_limits(board_without_double_connections, sources, empire.get_metropolis(), sources_limit)
+
+    return cities[empire.get_metropolis()].get_spices() + new_harvest
+
+
+def print_harvest(harvest_filename, final_harvest):
+
+    with open(harvest_filename, "w+") as file:
+        file.write(str(final_harvest))
+
+
+def obtain_previous_harvest(harvest_filename):
+
+    try:
+        with open(harvest_filename, 'r') as file:
+            text = file.read()
+            return int(text)
+    except:
+        return 0
+
+
+def resolve_harvest(harvest_filename, board, cities, empire):
+
+    previous_harvest = obtain_previous_harvest(harvest_filename)
+    print(previous_harvest)
+    new_harvest = obtain_new_harvest(board, cities, empire)
+    final_harvest = previous_harvest + new_harvest
+
+    print_harvest(harvest_filename, final_harvest)
+
+
+def main():
+
+    player_no = int(sys.argv[1])
+    cities_filename = sys.argv[2]
+    routes_filename = sys.argv[3]
+    empire_filename = sys.argv[4]
+
+    empire = game_utils.resolve_empire(player_no, empire_filename)
+    board, cities = game_utils.load_empty_board(cities_filename, routes_filename)
+
+    harvest_filename = game_utils.get_harvest_filename(player_no)
+
+    resolve_harvest(harvest_filename, board, cities, empire)
+
+
+if __name__ == '__main__':
+    main()

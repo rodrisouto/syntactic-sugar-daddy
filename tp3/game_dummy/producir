@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+
+import sys
+from typing import List, Tuple
+
+import game_utils
+import graph_utils
+
+
+def is_distance_fully_owned(cities, cities_in_distance, own_empire):
+
+    distance_if_fully_owned = True
+
+    for city_name in cities_in_distance:
+        if cities[city_name].get_owner() != own_empire.get_player():
+            distance_if_fully_owned = False
+
+    return distance_if_fully_owned
+
+
+def spice_troops_at_safe_distance(cities, distance):
+
+    spice = 0
+    safe_distance = distance - 2
+
+    if safe_distance >= 0:
+
+        for city_name in safe_distance:
+            city = cities[city_name]
+            troops_to_spice = city.get_troops() - 1
+            city.discount_troops(troops_to_spice)
+            spice += troops_to_spice
+
+    return spice
+
+
+def resolve_troops_placing(cities, distances, distance, harvest):
+
+    cities_to_place =  distances[distance-1] + distances[distance]
+    spices_per_city = harvest // len(cities_to_place)
+
+    i = 0
+    while harvest > 0:
+        if harvest < spices_per_city:
+            spices_to_place = harvest
+        else:
+            spices_to_place = spices_per_city
+
+        cities[cities_to_place[i]].place_troops(spices_to_place)
+
+        harvest -= spices_to_place
+        if i == len(cities_to_place)-1:
+            i = 0
+        else:
+            i += 1
+
+
+def resolve_production(board, cities, own_empire, harvest):
+
+    metropolis = own_empire.get_metropolis()
+    spice_from_spiced_troops = 0
+
+    parents, distances = graph_utils.bfs(board, metropolis)
+
+    for distance in distances:
+        if distance == 0:
+            continue
+
+        distance_if_fully_owned = is_distance_fully_owned(cities, distances[distance], own_empire)
+
+        if distance_if_fully_owned:
+            spice_from_spiced_troops += spice_troops_at_safe_distance(cities, distance)
+        else:
+            resolve_troops_placing(cities, distances, distance, harvest)
+            break
+
+    # Border Case only owns the metropolis.
+    if harvest > 0:
+        cities[metropolis].place_troops(harvest)
+        harvest = 0
+
+    # Always uses all the previous harvest.
+    return spice_from_spiced_troops
+
+
+def update_cities(cities):
+    map(lambda x: x.free_if_trooples(), cities.values())
+
+
+def resolve_cities_with_troops(cities, own_empire) -> List[Tuple[str, str]]:
+
+    city_metropolis = [cities[own_empire.get_metropolis()]]
+    own_cities = list(map(lambda x: cities[x], own_empire.get_original_troops_at_loading()))
+    own_cities_without_metropolis = list(filter(lambda x: x.get_name() != own_empire.get_metropolis(), own_cities))
+
+    own_cities = city_metropolis + own_cities_without_metropolis
+
+    return list(map(lambda x: (x.get_name(), str(x.get_troops())), own_cities))
+
+
+def print_temps(player_no, cities, own_empire, harvest):
+
+    cities_with_troops = resolve_cities_with_troops(cities, own_empire)
+    cities_with_troops_str: List[str] = list(map(lambda x: ','.join(x), cities_with_troops))
+    text = '\n'.join(cities_with_troops_str)
+
+    with open(game_utils.get_empire_temp_filename(player_no), 'w') as file:
+        file.write(text)
+
+    with open(game_utils.get_harvest_temp_filename(player_no), 'w') as file:
+        file.write(str(harvest))
+
+
+def main():
+
+    player_no = int(sys.argv[1])
+    cities_filename = sys.argv[2]
+    routes_filename = sys.argv[3]
+    empire_1_filename = sys.argv[4]
+    harvest_1_filename = sys.argv[5]
+    empire_2_filename = sys.argv[6]
+    harvest_2_filename = sys.argv[7]
+
+    own_empire, rival_empire = game_utils.resolve_empires(player_no, empire_1_filename, empire_2_filename)
+    own_harvest, rival_harvest = game_utils.resolve_harvests(player_no, harvest_1_filename, harvest_2_filename)
+
+    board, cities = game_utils.load_empty_board(cities_filename, routes_filename)
+
+    game_utils.validate_empires(board, own_empire, rival_empire)
+    game_utils.assign_cities(cities, own_empire, rival_empire)
+
+    final_own_harvest = resolve_production(board, cities, own_empire, own_harvest)
+    update_cities(cities)
+    print_temps(player_no, cities, own_empire, final_own_harvest)
+
+
+if __name__ == "__main__":
+    main()
