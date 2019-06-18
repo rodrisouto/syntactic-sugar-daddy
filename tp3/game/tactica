@@ -79,7 +79,6 @@ def main():
 
     game_utils.validate_empires(board, own_empire, rival_empire)
 
-    # TODO apply logic !!!!!
     attack = resolve_attacks(board, cities, own_empire)
     print_attack(player_no, attack)
 

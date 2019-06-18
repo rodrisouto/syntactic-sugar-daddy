@@ -133,7 +133,6 @@ class DirectedGraph:
 
     def add_edge(self, v, w, arista) -> bool:
         if v not in self._adjacencies.keys():
-            print("!!!! {}", self.get_nodes())
             raise Exception("Node {} is not in the graph.".format(v))
         if w not in self:
             raise Exception("Node {} is not in the graph.".format(w))

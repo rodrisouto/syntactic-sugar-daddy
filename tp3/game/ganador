@@ -90,27 +90,14 @@ def main():
     harvest_2_filename = sys.argv[7]
 
     empire_1, empire_2 = game_utils.resolve_empires(1, empire_1_filename, empire_2_filename)
-    print(empire_1)
-    print(empire_2)
     harvest_1, harvest_2 = game_utils.resolve_harvests(1, harvest_1_filename, harvest_2_filename)
-    print(harvest_1)
-    print(harvest_2)
 
     board, cities = game_utils.load_empty_board(cities_filename, routes_filename)
-    print(board)
-    print(board.get_nodes())
-    print(board.get_edges())
-    print()
-    print('cities: ' + str(cities))
     game_utils.assign_cities(cities, empire_1, empire_2)
-    print()
-    print('cities: ' + str(cities))
 
     game_utils.validate_empires(board, empire_1, empire_2)
 
-    # TODO apply logic !!!!!
     winner = resolve_winner(round_no, board, empire_1, harvest_1, empire_2, harvest_2)
-    print('!!!! winner: ' + str(winner))
     print_winner(winner)
 
 

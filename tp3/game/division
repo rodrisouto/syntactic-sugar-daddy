@@ -70,7 +70,6 @@ def resolve_empires(selection_1, selection_2):
                 player_1_chooses = True
             j += 1
 
-    # validation !!!!
     for city in empire_1:
         assert city not in empire_2, 'city: {}'.format(city)
 

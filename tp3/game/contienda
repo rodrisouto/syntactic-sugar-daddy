@@ -63,14 +63,7 @@ def main():
     print(attack_2)
 
     board, cities = game_utils.load_empty_board(cities_filename, routes_filename)
-    print(board)
-    print(board.get_nodes())
-    print(board.get_edges())
-    print()
-    print('cities: ' + str(cities))
     game_utils.assign_cities(cities, empire_1, empire_2)
-    print()
-    print('cities: ' + str(cities))
 
     game_utils.validate_empires(board, empire_1, empire_2)
     game_utils.validate_attacks(board, empire_1, empire_2, attack_1, attack_2)

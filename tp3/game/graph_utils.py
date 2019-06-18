@@ -83,12 +83,12 @@ def find_path(parents, v):
     return path
 
 
-def find_bottleneck(graph, path):
+def find_bottleneck(residual_graph, path):
 
     bottleneck = math.inf
 
     for i in range(len(path)-1):
-        edge = graph.get_edge(path[i], path[i+1])
+        edge = residual_graph.get_edge(path[i], path[i+1])
         if edge < bottleneck:
             bottleneck = edge
 
@@ -114,7 +114,9 @@ def update_edges_ff(graph, path, bottleneck):
         assert graph.get_edge(src, dst) >= 0
 
 
-def validate_graph_for_ff(graph):
+def validate_graph_for_ff(graph, sink):
+
+    assert len(graph.get_adjacents(sink)) is 0
 
     for edge in graph.get_edges():
         assert not graph.are_adjacents(edge[1], edge[0]), 'Vertices {} and {} are double connected.'.format(edge[0], edge[1])
@@ -142,18 +144,20 @@ def initialize_return_edges(graph, residual_graph):
 
 def calculate_flux(graph, residual_graph, sources, sink):
 
-    flux_from_source = 0
+    flux_from_sources = 0
     for source in sources:
         for w in graph.get_adjacents(source):
-            flux_from_source += residual_graph.get_edge(w, source)
+            print('!! {} {} {}'.format(w, source, residual_graph.get_edge(w, source)))
+            flux_from_sources += residual_graph.get_edge(w, source)
 
     flux_to_sink = 0
     for w in residual_graph.get_adjacents(sink):
+        print('!! {} {} {}'.format(sink, w, residual_graph.get_edge(sink, w)))
         flux_to_sink += residual_graph.get_edge(sink, w)
 
-    assert flux_from_source == flux_to_sink, '{} {}'.format(flux_from_source, flux_to_sink)
+    assert flux_from_sources == flux_to_sink, 'source: {} - {} | sink: {} - {}'.format(sources, flux_from_sources, sink, flux_to_sink)
 
-    return flux_from_source
+    return flux_from_sources
 
 
 # Edges must be integers.
@@ -208,25 +212,63 @@ def ford_fulkerson_multiple_sources(graph, sources, sink):
 def complex_valid_edge(graph, residual_graph, sources_limit):
 
     def _complex_valid_edge(v, w) -> bool:
+        if residual_graph.get_edge(v, w) <= 0:
+            return False
+
+        # If v is not source.
         if v not in sources_limit:
             return True
 
         flux_from_source = 0
         for u in graph.get_adjacents(v):
-            flux_from_source += flux_from_source + residual_graph.get_edge(u, v)
+            flux_from_source += residual_graph.get_edge(u, v)
+
+        assert flux_from_source <= sources_limit[v], 'v:{} | flux_from_source: {} | sources_limit[v]: {}'.format(v, flux_from_source, sources_limit[v])
+
+        if flux_from_source == sources_limit[v]:
+            return False
+
+        return True
 
     return _complex_valid_edge
 
 
-def ford_fulkerson_multiple_sources_2(graph, sources, sink, sources_limit: Dict[Any, int]):
+def find_bottleneck_with_limit(graph, residual_graph, path, sources_limit):
 
-    validate_graph_for_ff(graph)
+    bottleneck = math.inf
+
+    source = path[1]
+
+    flux_from_source = 0
+    for u in graph.get_adjacents(source):
+        flux_from_source += residual_graph.get_edge(u, source)
+
+    for i in range(len(path)-1):
+        edge = residual_graph.get_edge(path[i], path[i+1])
+
+        assert edge != 0, '{} | {} | {} | {} | {}'\
+            .format(path[i], path[i+1], graph.get_edge(path[i], path[i+1]), residual_graph.get_edge(path[i], path[i+1]), residual_graph.get_edge(path[i+1], path[i]))
+
+        if edge < bottleneck:
+            bottleneck = edge
+
+    bottleneck = min(bottleneck, sources_limit[source] - flux_from_source)
+
+    assert bottleneck is not 0
+
+    return bottleneck
+
+
+def ford_fulkerson_multiple_sources_and_limits(graph, sources, sink, sources_limit: Dict[Any, int]):
+
+    validate_graph_for_ff(graph, sink)
     for source in sources:
         assert source in sources_limit
 
     assert len(graph.get_nodes()) > 1
 
     residual_graph = copy_directed_graph(graph)
+
     super_source = add_super_source(residual_graph, sources)
 
     initialize_return_edges(graph, residual_graph)
@@ -237,11 +279,35 @@ def ford_fulkerson_multiple_sources_2(graph, sources, sink, sources_limit: Dict[
             break
 
         path = find_path(parents, sink)
-        bottleneck = find_bottleneck(residual_graph, path)
+        bottleneck = find_bottleneck_with_limit(graph, residual_graph, path, sources_limit)
 
         update_edges_ff(residual_graph, path, bottleneck)
 
     return calculate_flux(graph, residual_graph, sources, sink)
+
+
+def generate_directed_graph_without_double_connections(original_graph, s):
+
+    new_graph = copy_directed_graph(original_graph)
+    visited = set()
+    queue = []
+
+    visited.add(s)
+    queue.append(s)
+
+    while len(queue) != 0:
+        v = queue.pop(0)
+        adjacents = new_graph.get_adjacents(v)
+
+        for w in adjacents:
+            if new_graph.are_adjacents(w, v):
+                new_graph.remove_edge(w, v)
+
+                if w not in visited:
+                    visited.add(w)
+                    queue.append(w)
+
+    return new_graph
 
 
 # Graph was taken from this example: https://www.youtube.com/watch?v=Tl90tNtKvxs
@@ -344,13 +410,45 @@ def test_ford_fulkerson_multiple_sources_one_source_with_limit():
     graph.add_edge('d', 'b', 6)
     graph.add_edge('d', 't', 10)
 
-    sources_limit = {'s': 19}
+    sources_limit = {'s': 14}
 
-    flux = ford_fulkerson_multiple_sources_2(graph, ['s'], 't', sources_limit)
-    assert flux == 19, 'Flux expected was 19, found: {}'.format(flux)
+    flux = ford_fulkerson_multiple_sources_and_limits(graph, ['s'], 't', sources_limit)
+    assert flux == 14, 'Flux expected was 14, found: {}'.format(flux)
+
+
+def test_ford_fulkerson_multiple_sources_two_sources_with_limit():
+
+    graph = DirectedGraph()
+
+    graph.add_node('s')
+    graph.add_node('s2')
+    graph.add_node('a')
+    graph.add_node('b')
+    graph.add_node('c')
+    graph.add_node('d')
+    graph.add_node('t')
+
+    graph.add_edge('s', 'a', 10)
+    graph.add_edge('s', 'c', 10)
+    graph.add_edge('a', 'b', 4)
+    graph.add_edge('a', 'c', 2)
+    graph.add_edge('a', 'd', 8)
+    graph.add_edge('b', 't', 10)
+    graph.add_edge('c', 'd', 9)
+    graph.add_edge('d', 'b', 6)
+    graph.add_edge('d', 't', 10)
+
+    graph.add_edge('s2', 'b', 5)
+
+    sources_limit = {'s': 14, 's2': 1}
+
+    flux = ford_fulkerson_multiple_sources_and_limits(graph, ['s', 's2'], 't', sources_limit)
+    assert flux == 15, 'Flux expected was 15, found: {}'.format(flux)
+
 
 if __name__ == '__main__':
     test_ford_fulkerson()
     test_ford_fulkerson_multiple_sources_one_source()
     test_ford_fulkerson_multiple_sources_two_sources()
     test_ford_fulkerson_multiple_sources_one_source_with_limit()
+    test_ford_fulkerson_multiple_sources_two_sources_with_limit()
