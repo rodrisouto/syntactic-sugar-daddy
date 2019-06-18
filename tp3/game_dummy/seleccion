@@ -6,50 +6,20 @@ import game_utils
 import graph_utils
 
 
-def city_with_more_spices(cities):
+def player_1_selection(board):
 
-    max_spices =  max(map(lambda x: x.get_spices(), cities.values()))
+    cities_names = list(board.get_nodes())
+    cities_names = sorted(cities_names, key=lambda x: len(x))
 
-    for city_name in cities:
-        if cities[city_name].get_spices() == max_spices:
-            return city_name
-
-
-def chose_connected_cities(cities, distances):
-
-    chosen = []
-
-    for distance in distances:
-        sorted_cities_by_spices = sorted(distances[distance], key=lambda x: cities[x].get_spices(), reverse=True)
-
-        for city_name in sorted_cities_by_spices:
-            chosen.append(city_name)
-
-    return chosen
+    return cities_names
 
 
-def chose_not_connected_cities(cities, already_chosen_as_set):
+def player_2_selection(board):
 
-    not_chosen = list(filter(lambda x: x not in already_chosen_as_set, cities))
+    cities_names = list(board.get_nodes())
+    cities_names = sorted(cities_names, key=lambda x: len(x), reverse=True)
 
-    return sorted(not_chosen, key=lambda x: cities[x].get_spices(), reverse=True)
-
-
-# TODO do right
-def player_1_selection(board, cities):
-
-    choosen_metropolis = city_with_more_spices(cities)
-    parents, distances = graph_utils.bfs(board, choosen_metropolis)
-
-    chosen_connected = chose_connected_cities(cities, distances)
-    chosen_not_connected = chose_not_connected_cities(cities, set(chosen_connected))
-
-    return chosen_connected + chosen_not_connected
-
-
-# Has the same logic as player 1.
-def player_2_selection(board, cities):
-    return player_1_selection(board, cities)
+    return cities_names
 
 
 def print_cities(player_no, cities_names):
@@ -64,9 +34,9 @@ def print_cities(player_no, cities_names):
 def resolve_cities(player_no, board, cities):
 
     if player_no == 1:
-        return player_1_selection(board, cities)
+        return player_1_selection(board)
     elif player_no == 2:
-        return player_2_selection(board, cities)
+        return player_2_selection(board)
 
 
 def main():

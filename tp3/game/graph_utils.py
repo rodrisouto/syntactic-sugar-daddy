@@ -147,12 +147,10 @@ def calculate_flux(graph, residual_graph, sources, sink):
     flux_from_sources = 0
     for source in sources:
         for w in graph.get_adjacents(source):
-            print('!! {} {} {}'.format(w, source, residual_graph.get_edge(w, source)))
             flux_from_sources += residual_graph.get_edge(w, source)
 
     flux_to_sink = 0
     for w in residual_graph.get_adjacents(sink):
-        print('!! {} {} {}'.format(sink, w, residual_graph.get_edge(sink, w)))
         flux_to_sink += residual_graph.get_edge(sink, w)
 
     assert flux_from_sources == flux_to_sink, 'source: {} - {} | sink: {} - {}'.format(sources, flux_from_sources, sink, flux_to_sink)
