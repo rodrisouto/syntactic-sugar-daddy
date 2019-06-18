@@ -198,7 +198,7 @@ class DirectedGraph:
         if w not in self:
             raise Exception("Node {} is not in the graph.".format(w))
         if w not in self._adjacencies[v]:
-            return None
+            raise Exception("Node {} is not connected with {}.".format(v, w))
         return self._adjacencies[v][w]
 
     def get_nodes(self):
