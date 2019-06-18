@@ -47,7 +47,7 @@ def decide_if_attack_city(board, cities, rival_city, player_no):
     for city_name in rival_city_distances[1]:
         adjacent_city = cities[city_name]
 
-        if adjacent_city.get_owner() == player_no and adjacent_city.get_troops() > rival_city.get_troops() + 2:
+        if board.are_adjacents(city_name, rival_city.get_name()) and adjacent_city.get_owner() == player_no and adjacent_city.get_troops() > rival_city.get_troops() + 2:
             return adjacent_city.get_name(), rival_city.get_name(), str(rival_city.get_troops() + 1)
 
     return None

@@ -42,8 +42,14 @@ def resolve_contest(board, cities, empire_1, empire_2, attack_1, attack_2):
     free_troopless_cities(cities)
 
 
+def print_cities(player_no, cities):
 
+    cities_of_player = list(filter(lambda x: cities[x].get_owner() == player_no, cities))
+    final_cities_of_player = list(map(lambda x: ','.join((x, str(cities[x].get_troops()))), cities_of_player))
 
+    with open(game_utils.get_empire_filename(player_no), 'w') as file:
+        text = '\n'.join(final_cities_of_player)
+        file.write(text)
 
 
 def main():
@@ -56,11 +62,7 @@ def main():
     attack_2_filename = sys.argv[6]
 
     empire_1, empire_2 = game_utils.resolve_empires(1, empire_1_filename, empire_2_filename)
-    print(empire_1)
-    print(empire_2)
     attack_1, attack_2 = game_utils.resolve_attacks(attack_1_filename, attack_2_filename)
-    print(attack_1)
-    print(attack_2)
 
     board, cities = game_utils.load_empty_board(cities_filename, routes_filename)
     game_utils.assign_cities(cities, empire_1, empire_2)
@@ -69,10 +71,9 @@ def main():
     game_utils.validate_attacks(board, empire_1, empire_2, attack_1, attack_2)
 
     resolve_contest(board, cities, empire_1, empire_2, attack_1, attack_2)
-    # TODO print changed cities to files !!!!!
 
-    print()
-    print('cities: ' + str(cities))
+    print_cities(1, cities)
+    print_cities(2, cities)
 
 
 if __name__ == "__main__":
