@@ -2,19 +2,24 @@
 
 import sys
 
+sys.path.append("../utils")
+
 import game_utils
 import graph_utils
 
 from empire import Empire
 
 
-def resolve_attacks(board, cities, own_empire):
+def resolve_attacks(board, cities, own_empire, rival_empire):
 
     attack = []
 
     for city_name in own_empire.get_original_troops_at_loading():
+        if city_name == own_empire.get_metropolis():
+            continue
         for adjacent in board.get_adjacents(city_name):
-            if cities[adjacent].get_owner() != own_empire.get_player():
+            if cities[adjacent].get_owner() != own_empire.get_player() \
+                    and rival_empire.get_metropolis() != adjacent:
                 attack.append((city_name, adjacent, str(cities[city_name].get_troops())))
                 break
 
@@ -47,7 +52,7 @@ def main():
 
     game_utils.validate_empires(board, own_empire, rival_empire)
 
-    attack = resolve_attacks(board, cities, own_empire)
+    attack = resolve_attacks(board, cities, own_empire, rival_empire)
     print_attack(player_no, attack)
 
 

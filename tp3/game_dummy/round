@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+./seleccion 1 ciudades.txt rutas.txt
+./seleccion 2 ciudades.txt rutas.txt
+
+./division ciudades.txt rutas.txt seleccion1.txt seleccion2.txt
+
+
+./recolectar 1 ciudades.txt rutas.txt imperio1.txt
+./recolectar 2 ciudades.txt rutas.txt imperio2.txt
+
+./producir 1 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
+./producir 2 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
+
+python3 post_producir.py
+
+./tactica 1 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
+./tactica 2 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt

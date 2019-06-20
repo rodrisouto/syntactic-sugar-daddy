@@ -3,6 +3,8 @@
 import sys
 from typing import List
 
+sys.path.append("../utils")
+
 import game_utils
 
 
@@ -24,7 +26,6 @@ def load_selection(filename, all_cities):
                 selection.append(city_name)
 
     validate_selection(selection, all_cities)
-    print(selection)
     return selection
 
 

@@ -3,6 +3,8 @@
 import sys
 from copy import copy, deepcopy
 
+sys.path.append("../utils")
+
 import game_utils
 
 from empire import Empire
@@ -19,7 +21,13 @@ def execute_attack(cities, cities_snapshot, attack):
     for atk in attack:
         attacking_city = cities_snapshot[atk[0]]
         assert attacking_city.get_owner() is not None, '{} {}'.format(atk, attacking_city)
-        cities[atk[1]].receive_attack(attacking_city.get_owner(), atk[2])
+
+        try:
+            cities[atk[1]].receive_attack(attacking_city.get_owner(), atk[2])
+        except:
+            print(cities_snapshot)
+            print(atk)
+            raise Exception
 
 
 def free_troopless_cities(cities):

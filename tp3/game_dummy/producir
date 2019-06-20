@@ -3,6 +3,8 @@
 import sys
 from typing import List, Tuple
 
+sys.path.append("../utils")
+
 import game_utils
 import graph_utils
 
@@ -62,7 +64,7 @@ def resolve_production(board, cities, own_empire, harvest):
 
     parents, distances = graph_utils.bfs(board, metropolis)
 
-    for distance in distances:
+    for distance in sorted(distances.keys()):
         if distance == 0:
             continue
 
