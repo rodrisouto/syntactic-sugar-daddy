@@ -20,14 +20,13 @@ def is_distance_fully_owned(cities, cities_in_distance, own_empire):
     return distance_if_fully_owned
 
 
-def spice_troops_at_safe_distance(cities, distance):
-
+def spice_troops_at_safe_distance(cities, distances, distance):
     spice = 0
     safe_distance = distance - 2
 
     if safe_distance >= 0:
 
-        for city_name in safe_distance:
+        for city_name in distances[safe_distance]:
             city = cities[city_name]
             troops_to_spice = city.get_troops() - 1
             city.discount_troops(troops_to_spice)
@@ -71,7 +70,7 @@ def resolve_production(board, cities, own_empire, harvest):
         distance_if_fully_owned = is_distance_fully_owned(cities, distances[distance], own_empire)
 
         if distance_if_fully_owned:
-            spice_from_spiced_troops += spice_troops_at_safe_distance(cities, distance)
+            spice_from_spiced_troops += spice_troops_at_safe_distance(cities, distances, distance)
         else:
             resolve_troops_placing(cities, distances, distance, harvest)
             break

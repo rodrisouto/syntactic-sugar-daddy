@@ -6,7 +6,7 @@
 ./division ciudades.txt rutas.txt seleccion1.txt seleccion2.txt
 
 ronda=0
-maxima_ronda=10
+maxima_ronda=50
 
 while [[ ${ronda} -lt ${maxima_ronda} ]]
 do

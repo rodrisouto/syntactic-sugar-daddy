@@ -40,7 +40,7 @@ class City:
 
     def discount_troops(self, troops_to_discount):
         assert self._owner is not None, 'City {} has no owner.'.format(self)
-        assert self._troops >= troops_to_discount
+        assert self._troops >= troops_to_discount, '{} {}'.format(self._troops, troops_to_discount)
 
         self._troops -= troops_to_discount
 

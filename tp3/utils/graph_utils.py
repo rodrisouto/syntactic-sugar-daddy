@@ -2,6 +2,7 @@
 
 from typing import Dict, Any
 import math
+from copy import copy
 
 from graph import DirectedGraph
 
@@ -47,6 +48,22 @@ def bfs(graph, s, f_valid_edge=lambda x, y: True):
                 queue.append(w)
 
     return parents, distances
+
+
+def invert_graph(original_graph):
+
+    new_graph = copy_directed_graph(original_graph)
+    original_edges = copy(new_graph.get_edges())
+    inverted_edges = []
+
+    for edge in original_edges:
+        inverted_edges.append((edge[1], edge[0], edge[2]))
+        new_graph.remove_edge(edge[0], edge[1])
+
+    for edge in inverted_edges:
+        new_graph.add_edge(edge[0], edge[1], edge[2])
+
+    return new_graph
 
 
 def generate_directed_subgraph(original_graph, nodes_subset) -> DirectedGraph:

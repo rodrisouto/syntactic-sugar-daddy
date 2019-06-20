@@ -13,7 +13,7 @@ def get_harvest_limit_to_win():
 
 
 def get_rounds_limit():
-    return 10 # TODO !!!!
+    return 50
 
 
 def get_no_winner():
@@ -151,24 +151,24 @@ def resolve_attacks(attack_1_filename, attack_2_filename):
     return resolve_attack(attack_1_filename), resolve_attack(attack_2_filename)
 
 
-def _validate_attack(board, own_empire, rival_empire, attack):
+def validate_attack(board, own_empire, rival_empire, attack):
 
     own_placed_troops = own_empire.get_original_troops_at_loading()
 
     for atk in attack:
         assert len(atk) == 3, 'Error in atk len {}'.format(atk)
         assert atk[0] in own_placed_troops, 'Source City was not in own empire {}, {}'.format(atk, own_empire)
-        assert atk[1] not in own_empire.get_original_troops_at_loading(), 'Destination City was in own empire {}, {}'.format(atk, rival_empire)
-        assert atk[2] > 0, 'Troops can not be negative {}'.format(atk)
+        assert atk[1] not in own_placed_troops, 'Destination City was in own empire {}, {}'.format(atk, rival_empire)
+        assert int(atk[2]) > 0, 'Troops can not be negative {}'.format(atk)
 
-        assert own_placed_troops[atk[0]] >= atk[2]
+        assert own_placed_troops[atk[0]] >= int(atk[2])
         assert board.are_adjacents(atk[0], atk[1]), 'Cities are not adjacent: {}'.format(atk)
 
 
 def validate_attacks(board, empire_1, empire_2, attack_1, attack_2):
 
-    _validate_attack(board, empire_1, empire_2, attack_1)
-    _validate_attack(board, empire_2, empire_1, attack_2)
+    validate_attack(board, empire_1, empire_2, attack_1)
+    validate_attack(board, empire_2, empire_1, attack_2)
 
 
 def _assign_cities_of_empire(cities: Dict[str, City], owner, empire_troops):
