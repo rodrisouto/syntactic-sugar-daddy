@@ -10,7 +10,7 @@ import graph_utils
 from empire import Empire
 
 
-def resolve_attacks(board, cities, rival_empire, own_empire):
+def resolve_attacks(board, cities, own_empire, rival_empire):
 
     metropolis = own_empire.get_metropolis()
 
@@ -28,7 +28,7 @@ def decide_attacks(board, cities, own_empire, rival_empire, distances):
         cities_at_distance = distances[distance]
 
         for city_name in cities_at_distance:
-            if int(amount_of_owned_cities * 0.33) < len(attack):
+            if int(amount_of_owned_cities * 0.25) < len(attack):
                 break
 
             city = cities[city_name]
@@ -44,7 +44,11 @@ def decide_attacks(board, cities, own_empire, rival_empire, distances):
 
 def decide_if_attack_city(board, cities, rival_city, player_no, rival_metropolis):
 
-    _, rival_city_distances = graph_utils.bfs(board, rival_city.get_name())
+    inverted_board = graph_utils.invert_graph(board)
+    _, rival_city_distances = graph_utils.bfs(inverted_board, rival_city.get_name())
+
+    if 1 not in rival_city_distances:
+        return None
 
     for city_name in rival_city_distances[1]:
         adjacent_city = cities[city_name]
@@ -53,6 +57,7 @@ def decide_if_attack_city(board, cities, rival_city, player_no, rival_metropolis
                 and adjacent_city.get_owner() == player_no \
                 and adjacent_city.get_troops() > rival_city.get_troops() + 2 \
                 and city_name != rival_metropolis:
+
             return adjacent_city.get_name(), rival_city.get_name(), str(rival_city.get_troops() + 1)
 
     return None
@@ -85,6 +90,8 @@ def main():
     game_utils.validate_empires(board, own_empire, rival_empire)
 
     attack = resolve_attacks(board, cities, own_empire, rival_empire)
+    game_utils.validate_attack(board, own_empire, rival_empire, attack)
+
     print_attack(player_no, attack)
 
 

@@ -12,6 +12,7 @@ from graph import DirectedGraph
 
 def obtain_graph_for_ff(board_with_own_cities, metropolis):
 
+    # !!!!
     board_without_double_connections = \
         graph_utils.generate_directed_graph_without_double_connections(board_with_own_cities, metropolis)
 
