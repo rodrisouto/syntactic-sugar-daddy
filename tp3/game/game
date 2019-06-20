@@ -6,20 +6,18 @@
 ./division ciudades.txt rutas.txt seleccion1.txt seleccion2.txt
 
 ronda=0
-maxima_ronda=50
+maxima_ronda=10
 
 while [[ ${ronda} -lt ${maxima_ronda} ]]
 do
+    echo round: ${ronda}
     ./recolectar 1 ciudades.txt rutas.txt imperio1.txt
     ./recolectar 2 ciudades.txt rutas.txt imperio2.txt
 
     ./producir 1 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
     ./producir 2 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
 
-    mv ./imperio1_temp.txt imperio1.txt
-    mv ./imperio2_temp.txt imperio2.txt
-    mv ./harvest1_temp.txt cosecha1.txt
-    mv ./harvest2_temp.txt cosecha2.txt
+    python3 post_producir.py
 
     ./tactica 1 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
     ./tactica 2 ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
@@ -27,8 +25,11 @@ do
     ./contienda ciudades.txt rutas.txt imperio1.txt imperio2.txt ataque1.txt ataque2.txt
 
     ./ganador ${ronda} ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
-    if [[ -s ./ganador.txt ]]
+    if [[ -f ./ganador.txt ]]
     then
+	echo "The winner is:"
+	cat ./ganador.txt
+	rm ./ganador.txt
         exit 0
     fi
 

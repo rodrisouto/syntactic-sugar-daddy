@@ -13,7 +13,7 @@ def get_harvest_limit_to_win():
 
 
 def get_rounds_limit():
-    return 50
+    return 10 # TODO !!!!
 
 
 def get_no_winner():
@@ -81,8 +81,7 @@ def resolve_empire(player_no, empire_filename) -> Empire:
         try:
             city_name, troops = city.split(',')
         except Exception:
-            print('\n\n{}\n\n'.format(city))
-            raise ValueError('not enough values to unpack.')
+            raise ValueError('not enough values to unpack. {}'.format(city))
 
         assert city_name not in empire_troops, 'City {} was already in the empire.'.format(city_name)
 
@@ -159,7 +158,7 @@ def _validate_attack(board, own_empire, rival_empire, attack):
     for atk in attack:
         assert len(atk) == 3, 'Error in atk len {}'.format(atk)
         assert atk[0] in own_placed_troops, 'Source City was not in own empire {}, {}'.format(atk, own_empire)
-        assert atk[1] in rival_empire.get_original_troops_at_loading(), 'Destination City was not in own empire {}, {}'.format(atk, rival_empire)
+        assert atk[1] not in own_empire.get_original_troops_at_loading(), 'Destination City was in own empire {}, {}'.format(atk, rival_empire)
         assert atk[2] > 0, 'Troops can not be negative {}'.format(atk)
 
         assert own_placed_troops[atk[0]] >= atk[2]
@@ -178,7 +177,28 @@ def _assign_cities_of_empire(cities: Dict[str, City], owner, empire_troops):
         cities[city_name].assign_owner(owner, empire_troops[city_name])
 
 
-def assign_cities(cities: Dict[str, City], empire_1, empire_2):
+def assign_cities(cities: Dict[str, City], own_empire, rival_empire):
 
-    _assign_cities_of_empire(cities, 1, empire_1.get_original_troops_at_loading())
-    _assign_cities_of_empire(cities, 2, empire_2.get_original_troops_at_loading())
+    _assign_cities_of_empire(cities, own_empire.get_player(), own_empire.get_original_troops_at_loading())
+    _assign_cities_of_empire(cities, rival_empire.get_player(), rival_empire.get_original_troops_at_loading())
+
+
+def find_metropolis(cities_filename):
+
+    metropolis_1 = None
+    metropolis_2 = None
+
+    with open(cities_filename, "r") as file:
+        i = 0
+        for line in file:
+            city_tuple = line.split(',')
+            assert len(city_tuple) == 2
+
+            if i == 0:
+                metropolis_1 = city_tuple[0]
+            if i == 1:
+                metropolis_2 = city_tuple[0]
+
+            i += 1
+
+    return metropolis_1, metropolis_2

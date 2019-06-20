@@ -114,8 +114,7 @@ class DirectedGraph:
         return v in self._adjacencies
 
     def __getitem__(self, key):  # THIS IS DONE SO THAT IT RETURNS THE SAME OBJECT THAT WAS PUT IN THE GRAPH AS KEY.
-        if key not in self:
-            return None
+        assert key in self, '\n{}\n'.format(key)
         for w in self._adjacencies[key]:
             for u in self._adjacencies[w]:
                 if u == key:

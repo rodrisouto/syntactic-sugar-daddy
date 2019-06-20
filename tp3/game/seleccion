@@ -2,13 +2,15 @@
 
 import sys
 
+sys.path.append("../utils")
+
 import game_utils
 import graph_utils
 
 
 def city_with_more_spices(cities):
 
-    max_spices =  max(map(lambda x: x.get_spices(), cities.values()))
+    max_spices = max(map(lambda x: x.get_spices(), cities.values()))
 
     for city_name in cities:
         if cities[city_name].get_spices() == max_spices:
@@ -19,7 +21,7 @@ def chose_connected_cities(cities, distances):
 
     chosen = []
 
-    for distance in distances:
+    for distance in sorted(distances.keys()):
         sorted_cities_by_spices = sorted(distances[distance], key=lambda x: cities[x].get_spices(), reverse=True)
 
         for city_name in sorted_cities_by_spices:
@@ -35,21 +37,14 @@ def chose_not_connected_cities(cities, already_chosen_as_set):
     return sorted(not_chosen, key=lambda x: cities[x].get_spices(), reverse=True)
 
 
-# TODO do right
-def player_1_selection(board, cities):
+def selection(board, cities, metropolis):
 
-    choosen_metropolis = city_with_more_spices(cities)
-    parents, distances = graph_utils.bfs(board, choosen_metropolis)
+    parents, distances = graph_utils.bfs(board, metropolis)
 
     chosen_connected = chose_connected_cities(cities, distances)
     chosen_not_connected = chose_not_connected_cities(cities, set(chosen_connected))
 
     return chosen_connected + chosen_not_connected
-
-
-# Has the same logic as player 1.
-def player_2_selection(board, cities):
-    return player_1_selection(board, cities)
 
 
 def print_cities(player_no, cities_names):
@@ -61,12 +56,12 @@ def print_cities(player_no, cities_names):
         file.write(text)
 
 
-def resolve_cities(player_no, board, cities):
+def resolve_cities(player_no, board, cities, metropolis_1, metropolis_2):
 
     if player_no == 1:
-        return player_1_selection(board, cities)
+        return selection(board, cities, metropolis_1)
     elif player_no == 2:
-        return player_2_selection(board, cities)
+        return selection(board, cities, metropolis_2)
 
 
 def main():
@@ -75,9 +70,10 @@ def main():
     cities_filename = sys.argv[2]
     routes_filename = sys.argv[3]
 
+    metropolis_1, metropolis_2 = game_utils.find_metropolis(cities_filename)
     board, cities = game_utils.load_empty_board(cities_filename, routes_filename)
 
-    chosen = resolve_cities(player_no, board, cities)
+    chosen = resolve_cities(player_no, board, cities, metropolis_1, metropolis_2)
     assert len(set(chosen)) == len(cities), '{} \n {}'.format(chosen, cities)
     print_cities(player_no, chosen)
 

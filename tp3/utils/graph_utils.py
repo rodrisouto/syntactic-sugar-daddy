@@ -29,6 +29,7 @@ def bfs(graph, s, f_valid_edge=lambda x, y: True):
 
     while len(queue) != 0:
         v = queue.pop(0)
+
         adjacents = graph.get_adjacents(v)
 
         for w in adjacents:
@@ -38,7 +39,7 @@ def bfs(graph, s, f_valid_edge=lambda x, y: True):
                 visited[w] = w_distance
                 parents[w] = v
 
-                if w_distance not in distances:
+                if w_distance not in sorted(distances.keys()):
                     distances[w_distance] = [w]
                 else:
                     distances[w_distance].append(w)
@@ -122,12 +123,12 @@ def validate_graph_for_ff(graph, sink):
         assert not graph.are_adjacents(edge[1], edge[0]), 'Vertices {} and {} are double connected.'.format(edge[0], edge[1])
 
 
-def add_super_source(resigual_graph, sources):
+def add_super_source(resigual_graph, sources, sources_limit):
 
     super_source = '----super_source----'
     assert super_source not in resigual_graph
     resigual_graph.add_node(super_source)
-    list(map(lambda x: resigual_graph.add_edge(super_source, x, math.inf), sources))
+    list(map(lambda x: resigual_graph.add_edge(super_source, x, sources_limit[x]), sources))
     list(map(lambda x: resigual_graph.add_edge(x, super_source, 0), sources))
 
     return super_source
@@ -144,18 +145,11 @@ def initialize_return_edges(graph, residual_graph):
 
 def calculate_flux(graph, residual_graph, sources, sink):
 
-    flux_from_sources = 0
-    for source in sources:
-        for w in graph.get_adjacents(source):
-            flux_from_sources += residual_graph.get_edge(w, source)
-
     flux_to_sink = 0
     for w in residual_graph.get_adjacents(sink):
         flux_to_sink += residual_graph.get_edge(sink, w)
 
-    assert flux_from_sources == flux_to_sink, 'source: {} - {} | sink: {} - {}'.format(sources, flux_from_sources, sink, flux_to_sink)
-
-    return flux_from_sources
+    return flux_to_sink
 
 
 # Edges must be integers.
@@ -263,16 +257,17 @@ def ford_fulkerson_multiple_sources_and_limits(graph, sources, sink, sources_lim
     for source in sources:
         assert source in sources_limit
 
-    assert len(graph.get_nodes()) > 1
+    if len(graph.get_nodes()) <= 1:
+        return 0
 
     residual_graph = copy_directed_graph(graph)
 
-    super_source = add_super_source(residual_graph, sources)
+    super_source = add_super_source(residual_graph, sources, sources_limit)
 
     initialize_return_edges(graph, residual_graph)
 
     while True:
-        parents, _ = bfs(residual_graph, super_source, complex_valid_edge(graph, residual_graph, sources_limit))
+        parents, _ = bfs(residual_graph, super_source, lambda x, y: residual_graph.get_edge(x, y) > 0)
         if parents[sink] is None:
             break
 
@@ -445,8 +440,10 @@ def test_ford_fulkerson_multiple_sources_two_sources_with_limit():
 
 
 if __name__ == '__main__':
+    """
     test_ford_fulkerson()
     test_ford_fulkerson_multiple_sources_one_source()
     test_ford_fulkerson_multiple_sources_two_sources()
+    """
     test_ford_fulkerson_multiple_sources_one_source_with_limit()
     test_ford_fulkerson_multiple_sources_two_sources_with_limit()

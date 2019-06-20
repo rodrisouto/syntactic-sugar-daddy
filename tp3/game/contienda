@@ -3,6 +3,8 @@
 import sys
 from copy import copy, deepcopy
 
+sys.path.append("../utils")
+
 import game_utils
 
 from empire import Empire

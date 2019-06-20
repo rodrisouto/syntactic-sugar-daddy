@@ -2,6 +2,8 @@
 
 import sys
 
+sys.path.append("../utils")
+
 import game_utils
 import graph_utils
 
@@ -16,7 +18,13 @@ def empire_has_requirements_to_win(board, own_harvest, rival_empire):
     rival_metropolis = rival_empire.get_metropolis()
     parents, distances = graph_utils.bfs(board, rival_metropolis)
 
-    if len(distances[1]) == 0:
+    rival_cities_next_to_rival_metropolis = []
+
+    for city_name in distances[1]:
+        if city_name in rival_empire.get_original_troops_at_loading():
+            rival_cities_next_to_rival_metropolis.append(city_name)
+
+    if len(rival_cities_next_to_rival_metropolis) == 0:
         return True
 
     return False
@@ -24,27 +32,29 @@ def empire_has_requirements_to_win(board, own_harvest, rival_empire):
 
 def resolve_winner(round_no, board, empire_1, harvest_1, empire_2, harvest_2):
 
-    if round_no > game_utils.get_rounds_limit():
+    if round_no >= game_utils.get_rounds_limit() -1:
         return untie(empire_1, harvest_1, empire_2, harvest_2)
 
     empire_1_can_win = empire_has_requirements_to_win(board, harvest_1, empire_2)
     empire_2_can_win = empire_has_requirements_to_win(board, harvest_2, empire_1)
 
     if empire_1_can_win and empire_2_can_win:
+        print('Tie.')
         return untie(empire_1, harvest_1, empire_2, harvest_2)
     elif empire_1_can_win:
+        print('Won empire 1.')
         return empire_1.get_player()
     elif empire_2_can_win:
+        print('Won empire 2.')
         return empire_2.get_player()
     else:
-        return game_utils.get_no_winner()
+        return None
 
 
 def untie(empire_1, harvest_1, empire_2, harvest_2):
 
     # Untie by harvest.
     print('Untie by harvest.')
-    print(harvest_1, harvest_2)
     if harvest_1 > harvest_2:
         return empire_1.get_player()
     elif harvest_2 > harvest_1:
@@ -62,8 +72,8 @@ def untie(empire_1, harvest_1, empire_2, harvest_2):
 
     # Untie by amount of troops.
     print('Untie by amount of troops.')
-    troops_empire_1 = sum(empire_1.get_cities().values())
-    troops_empire_2 = sum(empire_2.get_cities().values())
+    troops_empire_1 = sum(empire_1.get_original_troops_at_loading().values())
+    troops_empire_2 = sum(empire_2.get_original_troops_at_loading().values())
 
     if troops_empire_1 > troops_empire_2:
         return empire_1.get_player()
@@ -98,7 +108,9 @@ def main():
     game_utils.validate_empires(board, empire_1, empire_2)
 
     winner = resolve_winner(round_no, board, empire_1, harvest_1, empire_2, harvest_2)
-    print_winner(winner)
+
+    if winner is not None:
+        print_winner(winner)
 
 
 if __name__ == "__main__":

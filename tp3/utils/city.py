@@ -45,7 +45,7 @@ class City:
         self._troops -= troops_to_discount
 
     def receive_attack(self, attacker, attacking_troops):
-        assert attacker is not self._owner, 'Can not attack one self.'
+        # assert attacker is not self._owner, 'Can not attack one self. {}'.format(attacker, self)
 
         self._troops -= attacking_troops
 

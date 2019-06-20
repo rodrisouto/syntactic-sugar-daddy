@@ -2,6 +2,8 @@
 
 import sys
 
+sys.path.append("../utils")
+
 import game_utils
 import graph_utils
 
@@ -56,7 +58,6 @@ def obtain_previous_harvest(harvest_filename):
 def resolve_harvest(harvest_filename, board, cities, empire):
 
     previous_harvest = obtain_previous_harvest(harvest_filename)
-    print(previous_harvest)
     new_harvest = obtain_new_harvest(board, cities, empire)
     final_harvest = previous_harvest + new_harvest
 

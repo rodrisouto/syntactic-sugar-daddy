@@ -3,6 +3,8 @@
 import sys
 from typing import List, Tuple
 
+sys.path.append("../utils")
+
 import game_utils
 import graph_utils
 
@@ -24,7 +26,6 @@ def spice_troops_at_safe_distance(cities, distance):
     safe_distance = distance - 2
 
     if safe_distance >= 0:
-
         for city_name in safe_distance:
             city = cities[city_name]
             troops_to_spice = city.get_troops() - 1
@@ -36,7 +37,7 @@ def spice_troops_at_safe_distance(cities, distance):
 
 def resolve_troops_placing(cities, distances, distance, harvest):
 
-    cities_to_place =  distances[distance-1] + distances[distance]
+    cities_to_place = distances[distance-1] + distances[distance]
     spices_per_city = harvest // len(cities_to_place)
 
     i = 0
@@ -54,6 +55,8 @@ def resolve_troops_placing(cities, distances, distance, harvest):
         else:
             i += 1
 
+    return harvest
+
 
 def resolve_production(board, cities, own_empire, harvest):
 
@@ -62,7 +65,7 @@ def resolve_production(board, cities, own_empire, harvest):
 
     parents, distances = graph_utils.bfs(board, metropolis)
 
-    for distance in distances:
+    for distance in sorted(distances.keys()):
         if distance == 0:
             continue
 
@@ -71,13 +74,12 @@ def resolve_production(board, cities, own_empire, harvest):
         if distance_if_fully_owned:
             spice_from_spiced_troops += spice_troops_at_safe_distance(cities, distance)
         else:
-            resolve_troops_placing(cities, distances, distance, harvest)
+            harvest = resolve_troops_placing(cities, distances, distance, harvest)
             break
 
     # Border Case only owns the metropolis.
     if harvest > 0:
         cities[metropolis].place_troops(harvest)
-        harvest = 0
 
     # Always uses all the previous harvest.
     return spice_from_spiced_troops

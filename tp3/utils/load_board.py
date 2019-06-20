@@ -25,7 +25,12 @@ def _resolve_cities(cities_filename):
     cities_str = _read_from_file(cities_filename)
 
     for city_str in cities_str.split('\n'):  # format: 'CityName,Spices'
+
+        if city_str == '':
+            continue
+
         city_vec = city_str.split(',')
+        assert len(city_vec) == 2, '{}'.format(city_vec)
         city_name = city_vec[0]
         city = City(city_name, int(city_vec[1]))
         cities[city_name] = city
