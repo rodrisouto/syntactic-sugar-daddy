@@ -136,8 +136,10 @@ def validate_graph_for_ff(graph, sink):
 
     assert len(graph.get_adjacents(sink)) is 0
 
+    """
     for edge in graph.get_edges():
         assert not graph.are_adjacents(edge[1], edge[0]), 'Vertices {} and {} are double connected.'.format(edge[0], edge[1])
+        """
 
 
 def add_super_source(resigual_graph, sources, sources_limit):
@@ -242,32 +244,6 @@ def complex_valid_edge(graph, residual_graph, sources_limit):
     return _complex_valid_edge
 
 
-def find_bottleneck_with_limit(graph, residual_graph, path, sources_limit):
-
-    bottleneck = math.inf
-
-    source = path[1]
-
-    flux_from_source = 0
-    for u in graph.get_adjacents(source):
-        flux_from_source += residual_graph.get_edge(u, source)
-
-    for i in range(len(path)-1):
-        edge = residual_graph.get_edge(path[i], path[i+1])
-
-        assert edge != 0, '{} | {} | {} | {} | {}'\
-            .format(path[i], path[i+1], graph.get_edge(path[i], path[i+1]), residual_graph.get_edge(path[i], path[i+1]), residual_graph.get_edge(path[i+1], path[i]))
-
-        if edge < bottleneck:
-            bottleneck = edge
-
-    bottleneck = min(bottleneck, sources_limit[source] - flux_from_source)
-
-    assert bottleneck is not 0
-
-    return bottleneck
-
-
 def ford_fulkerson_multiple_sources_and_limits(graph, sources, sink, sources_limit: Dict[Any, int]):
 
     validate_graph_for_ff(graph, sink)
@@ -289,7 +265,7 @@ def ford_fulkerson_multiple_sources_and_limits(graph, sources, sink, sources_lim
             break
 
         path = find_path(parents, sink)
-        bottleneck = find_bottleneck_with_limit(graph, residual_graph, path, sources_limit)
+        bottleneck = find_bottleneck(residual_graph, path)
 
         update_edges_ff(residual_graph, path, bottleneck)
 
