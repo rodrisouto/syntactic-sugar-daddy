@@ -13,3 +13,5 @@ venv/
 *.txt
 
 !planilla.txt
+!rutas.txt
+!ciudades.txt
