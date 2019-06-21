@@ -27,9 +27,9 @@ do
     ./ganador ${ronda} ciudades.txt rutas.txt imperio1.txt cosecha1.txt imperio2.txt cosecha2.txt
     if [[ -f ./ganador.txt ]]
     then
-	echo "The winner is:"
-	cat ./ganador.txt
-	rm ./ganador.txt
+	    echo "The winner is:"
+	    cat ./ganador.txt
+	    rm ./ganador.txt
         exit 0
     fi
 
